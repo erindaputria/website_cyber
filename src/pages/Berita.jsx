@@ -114,7 +114,7 @@ export default function CyberEduPortal() {
             <div className="bg-blue-500 p-2 rounded-full">
               <BookOpen size={24} />
             </div>
-            <h1 className="text-2xl font-bold">CyberEdu</h1>
+            <h1 className="text-2xl font-bold">CyberEdu Education</h1>
           </div>
           
           {/* Desktop Navigation */}
