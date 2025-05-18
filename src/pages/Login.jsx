@@ -32,7 +32,7 @@ export default function CyberSecurityAuthPage() {
           <p className="text-blue-200">
             {isLogin 
               ? "Akses semua materi keamanan siber dan menjadi ahli dalam melindungi dunia digital."
-              : ""}
+              : "Mulai perjalanan Anda dalam dunia keamanan siber dan pelajari cara melindungi aset digital."}
           </p>
         </div>
       </div>
@@ -57,9 +57,11 @@ export default function CyberSecurityAuthPage() {
             </div>
           </div>
           
-          <div className="space-y-6">
-            {!isLogin && (
-              <div>
+          {/* Form container with fixed height and scroll when needed */}
+          <div className="min-h-96 flex flex-col">
+            <div className="space-y-6 flex-1">
+              {/* Full Name Field - Hidden but preserved space in login mode */}
+              <div className={isLogin ? 'hidden' : 'block'}>
                 <label className="block text-sm font-medium text-gray-400 mb-2">Nama Lengkap</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -74,53 +76,54 @@ export default function CyberSecurityAuthPage() {
                   />
                 </div>
               </div>
-            )}
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">Email</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail size={18} className="text-gray-500" />
+              
+              {/* Email Field - Always visible */}
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Mail size={18} className="text-gray-500" />
+                  </div>
+                  <input 
+                    type="email" 
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-700 rounded-lg bg-gray-800 text-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="nama@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
-                <input 
-                  type="email" 
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-700 rounded-lg bg-gray-800 text-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="nama@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
               </div>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">Password</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock size={18} className="text-gray-500" />
+              
+              {/* Password Field - Always visible */}
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">Password</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Lock size={18} className="text-gray-500" />
+                  </div>
+                  <input 
+                    type={showPassword ? "text" : "password"}
+                    className="block w-full pl-10 pr-10 py-3 border border-gray-700 rounded-lg bg-gray-800 text-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Masukkan password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff size={18} className="text-gray-500 hover:text-gray-300" />
+                    ) : (
+                      <Eye size={18} className="text-gray-500 hover:text-gray-300" />
+                    )}
+                  </button>
                 </div>
-                <input 
-                  type={showPassword ? "text" : "password"}
-                  className="block w-full pl-10 pr-10 py-3 border border-gray-700 rounded-lg bg-gray-800 text-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Masukkan password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOff size={18} className="text-gray-500 hover:text-gray-300" />
-                  ) : (
-                    <Eye size={18} className="text-gray-500 hover:text-gray-300" />
-                  )}
-                </button>
               </div>
-            </div>
-            
-            {isLogin && (
-              <div className="flex items-center justify-between">
+              
+              {/* Remember me & Forgot password - Only in login mode */}
+              <div className={isLogin ? 'flex items-center justify-between' : 'hidden'}>
                 <div className="flex items-center">
                   <input
                     id="remember-me"
@@ -139,21 +142,25 @@ export default function CyberSecurityAuthPage() {
                   </a>
                 </div>
               </div>
-            )}
-            
-            <button
-              onClick={handleSubmit}
-              className="flex w-full justify-center items-center space-x-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
-            >
-              <span>{isLogin ? "Login" : "Daftar Sekarang"}</span>
-              <ArrowRight size={16} />
-            </button>
-            
-            {!isLogin && (
-              <p className="mt-2 text-center text-sm text-gray-400">
-                Dengan mendaftar, Anda menyetujui <a href="#" className="text-blue-400 hover:text-blue-300">Syarat & Ketentuan</a> dan <a href="#" className="text-blue-400 hover:text-blue-300">Kebijakan Privasi</a> kami.
-              </p>
-            )}
+              
+              {/* Terms text only in signup mode - create invisible space in login mode */}
+              <div className={`h-6 ${isLogin ? 'hidden' : 'block'}`}>
+                {!isLogin && (
+                  <p className="text-center text-sm text-gray-400">
+                    Dengan mendaftar, Anda menyetujui <a href="#" className="text-blue-400 hover:text-blue-300">Syarat & Ketentuan</a> dan <a href="#" className="text-blue-400 hover:text-blue-300">Kebijakan Privasi</a> kami.
+                  </p>
+                )}
+              </div>
+              
+              {/* Submit Button */}
+              <button
+                onClick={handleSubmit}
+                className="flex w-full justify-center items-center space-x-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
+              >
+                <span>{isLogin ? "Login" : "Daftar Sekarang"}</span>
+                <ArrowRight size={16} />
+              </button>
+            </div>
           </div>
           
           <div className="mt-8">

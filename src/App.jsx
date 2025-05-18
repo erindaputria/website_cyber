@@ -7,6 +7,8 @@ import Materi from './pages/Materi'
 import Berita from './pages/Berita'
 import Forum from './pages/Forum'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Dashboard from './pages/Dashboard'
+import Navbar from './pages/Navbar'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -14,10 +16,11 @@ function App() {
   return (
    <Router>
     <Routes>
-    <Route path="/login" element={<Login />} />
-    <Route path="/materi" element={<Materi />} />
-    <Route path="/berita" element={<Berita />} />
-     <Route path="/forum" element={<Forum />} />
+      <Route path="/" element={<Navbar />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/materi" element={<Materi />} />
+      <Route path="/berita" element={<Berita />} />
+      <Route path="/forum" element={<Forum />} />
     </Routes>
    </Router>
   )

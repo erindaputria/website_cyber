@@ -4,12 +4,10 @@ import { Book, Lock, Shield, Code, Cloud, Search, ArrowRight, Info } from 'lucid
 // Main App Component
 export default function CyberEduApp() {
   const [activeLevel, setActiveLevel] = useState(null);
-  const [activeTopic, setActiveTopic] = useState(null);
   
   // Function to reset selections
   const resetSelections = () => {
     setActiveLevel(null);
-    setActiveTopic(null);
   };
   
   // Content data structure
@@ -420,8 +418,8 @@ export default function CyberEduApp() {
           </div>
         )}
         
-        {/* Level Topics */}
-        {activeLevel && !activeTopic && (
+        {/* Level Content - Show all topics directly */}
+        {activeLevel && (
           <div>
             <div className="flex items-center mb-6">
               <button 
@@ -429,47 +427,27 @@ export default function CyberEduApp() {
                 className="flex items-center text-blue-600 hover:text-blue-800 mr-4"
               >
                 <ArrowRight className="w-4 h-4 transform rotate-180 mr-1" />
-                Kembali
+                Kembali ke Semua Level
               </button>
               <h2 className="text-2xl font-bold">{activeLevel.title}</h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-8">
               {activeLevel.topics.map(topic => (
-                <div 
-                  key={topic.id}
-                  className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow cursor-pointer border-2 border-transparent hover:border-blue-400"
-                  onClick={() => setActiveTopic(topic)}
-                >
-                  <div className="flex items-center mb-4">
-                    <div className="bg-gray-100 p-3 rounded-full mr-4">
-                      {topic.icon}
+                <div key={topic.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+                  <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 text-white">
+                    <div className="flex items-center">
+                      <div className="bg-white bg-opacity-20 p-2 rounded-full mr-3">
+                        {topic.icon}
+                      </div>
+                      <h3 className="text-xl font-bold">{topic.title}</h3>
                     </div>
-                    <h3 className="text-xl font-bold">{topic.title}</h3>
                   </div>
-                  <p className="text-gray-600">Klik untuk mempelajari lebih lanjut tentang {topic.title}</p>
+                  <div className="p-6">
+                    {topic.content}
+                  </div>
                 </div>
               ))}
-            </div>
-          </div>
-        )}
-        
-        {/* Topic Content */}
-        {activeLevel && activeTopic && (
-          <div>
-            <div className="flex items-center mb-6">
-              <button 
-                onClick={() => setActiveTopic(null)}
-                className="flex items-center text-blue-600 hover:text-blue-800 mr-4"
-              >
-                <ArrowRight className="w-4 h-4 transform rotate-180 mr-1" />
-                Kembali ke {activeLevel.title}
-              </button>
-              <h2 className="text-2xl font-bold">{activeTopic.title}</h2>
-            </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-md">
-              {activeTopic.content}
             </div>
           </div>
         )}
