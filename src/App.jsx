@@ -10,6 +10,8 @@ import Quiz from './pages/Quiz'
 import Dashboard from './pages/Navbar'
 import Header from './pages/Header'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Dashboard from './pages/Dashboard'
+import Navbar from './pages/Navbar'
 
 function App() {
   const [count, setCount] = useState(0)
