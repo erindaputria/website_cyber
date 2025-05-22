@@ -18,9 +18,9 @@ export default function CyberSecurityAuthPage() {
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-900">
       {/* Left side - Branding */}
-      <div className="md:w-1/2 bg-gradient-to-br from-blue-900 to-indigo-900 p-8 flex flex-col justify-center items-center text-center">
+      <div className="md:w-1/2 bg-gradient-to-br from-blue-900 to-blue-700 p-8 flex flex-col justify-center items-center text-center">
         <div className="mb-8">
-          <Shield size={64} className="text-blue-400 mx-auto" />
+          <Shield size={64} className="text-white mx-auto" />
           <h1 className="text-4xl font-bold text-white mt-6">CyberEdu</h1>
           <p className="text-blue-200 mt-4 text-xl">Platform Pembelajaran Keamanan Siber</p>
         </div>

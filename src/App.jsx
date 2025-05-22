@@ -6,6 +6,9 @@ import Login from './pages/Login'
 import Materi from './pages/Materi'
 import Berita from './pages/Berita'
 import Forum from './pages/Forum'
+import Quiz from './pages/Quiz'
+import Dashboard from './pages/Navbar'
+import Header from './pages/Header'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -17,7 +20,10 @@ function App() {
     <Route path="/login" element={<Login />} />
     <Route path="/materi" element={<Materi />} />
     <Route path="/berita" element={<Berita />} />
-     <Route path="/forum" element={<Forum />} />
+    <Route path="/forum" element={<Forum />} />
+    <Route path="/quiz" element={<Quiz />} />
+    <Route path="/" element={<Dashboard />} />
+      <Route path="/header" element={<Header />} />
     </Routes>
    </Router>
   )

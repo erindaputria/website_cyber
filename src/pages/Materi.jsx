@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Book, Lock, Shield, Code, Cloud, Search, ArrowRight, Info } from 'lucide-react';
+import Header from './Header'
 
 // Main App Component
 export default function CyberEduApp() {
@@ -331,21 +332,10 @@ export default function CyberEduApp() {
   
   // Main content rendering
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div>
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center mb-4 md:mb-0">
-              <Shield className="w-10 h-10 mr-3" />
-              <h1 className="text-3xl font-bold">CyberEdu</h1>
-            </div>
-            <div className="text-center md:text-right">
-              <p className="text-lg">Platform Pembelajaran Keamanan Cyber</p>
-              <p className="text-sm opacity-75">Tingkatkan keahlian keamanan cyber Anda</p>
-            </div>
-          </div>
-        </div>
+      <header >
+        <Header />
       </header>
       
       {/* Main Content */}
@@ -477,15 +467,12 @@ export default function CyberEduApp() {
       
       {/* Footer */}
       <footer className="bg-gray-800 text-white mt-16">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-2 py-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center mb-4 md:mb-0">
-              <Shield className="w-6 h-6 mr-2" />
-              <span className="text-xl font-bold">CyberEdu</span>
+            <div className="w-full text-center">
+              <p className="text-sm opacity-75 inline-block">© 2025 CyberEdu. Keamanan digital adalah hak semua orang.</p>
             </div>
-            <div className="text-center md:text-right">
-              <p className="text-sm opacity-75">© 2025 CyberEdu. Tingkatkan keamanan cyber Anda sekarang.</p>
-            </div>
+
           </div>
         </div>
       </footer>
