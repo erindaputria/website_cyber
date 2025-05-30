@@ -27,8 +27,42 @@ export default function CyberSecurityAuthPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Implementasi logika login/signup di sini
-    console.log(isLogin ? 'Login dengan:' : 'Signup dengan:', { email, password, fullName });
+    setLoading(true);
+    setError('');
+    
+    // Jika ini adalah event handler (misalnya handleSubmit):
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  
+  try {
+    if (isLogin) {
+      // Login logic
+      const response = await axios.post('http://127.0.0.1:8000/api/login', {
+        email,
+        password
+      });
+      
+      console.log('Login successful:', response.data);
+      // Handle successful login
+    } else {
+      // Signup logic
+      const response = await axios.post('http://127.0.0.1:8000/api/register', {
+        name: fullName,
+        email,
+        password
+      });
+      
+      console.log('Registration successful:', response.data);
+      // Handle successful registration
+    }
+      } catch (err) {
+        console.error('Authentication error:', err);
+        setError(err.response?.data?.message || 'An error occurred during authentication');
+      } finally {
+        setLoading(false);
+      }
+    }
   };
   
   return (
@@ -173,7 +207,7 @@ export default function CyberSecurityAuthPage() {
                     placeholder="nama@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    required
+                    required              
                   />
                 </div>
               </motion.div>

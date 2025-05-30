@@ -390,6 +390,22 @@ export default function CyberEduPortal() {
           </div>
         </div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            <span className="ml-3 text-gray-600">Memuat artikel...</span>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && !isLoading && (
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
+            <p className="font-bold">Error</p>
+            <p>Gagal memuat artikel: {error}. Menampilkan data cadangan.</p>
+          </div>
+        )}
+
         {/* Results Info */}
         <div className="mb-6">
           <p className="text-gray-600">
