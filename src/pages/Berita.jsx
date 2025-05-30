@@ -1,442 +1,502 @@
 import { useState, useEffect } from 'react';
-import { Search, Clock, BookOpen, Tag, User, ChevronRight, Menu, X, ArrowRight } from 'lucide-react';
+import { Search, Clock, BookOpen, Tag, User, ChevronRight, ArrowRight, Loader2, RefreshCw, AlertTriangle, Shield, Database, Cpu } from 'lucide-react';
+import Headeer from './Headeer';
+import Footer from './Footer';
 
-// Data dummy untuk artikel cyber security
-const cybersecurityArticles = [
+const Header = () => (
+  <Headeer />
+);
+
+// Enhanced API configuration with multiple sources
+const API_SOURCES = [
   {
-    id: 1,
-    title: "Serangan Ransomware Terbaru Menargetkan Infrastruktur Kesehatan Global",
-    summary: "Gelombang serangan ransomware baru telah melumpuhkan beberapa sistem rumah sakit dan fasilitas kesehatan di berbagai negara, menunjukkan peningkatan tren serangan siber terhadap sektor kesehatan.",
-    author: "Dr. Cyber Security",
-    date: "12 Mei 2025",
-    category: "Threats & Attacks",
-    readTime: "8 menit",
-    image: "/api/placeholder/600/400",
-    trending: true
+    name: "CNN Indonesia",
+    baseUrl: "https://api-berita-indonesia.vercel.app",
+    endpoint: "/cnn/teknologi"
   },
   {
-    id: 2,
-    title: "Kerentanan Zero-Day pada Browser Populer Memungkinkan Akses Remote",
-    summary: "Para peneliti keamanan menemukan kerentanan zero-day berbahaya yang memungkinkan penyerang mendapatkan akses jarak jauh ke sistem korban hanya dengan mengunjungi situs web yang telah disusupi.",
-    author: "Security Researcher",
-    date: "10 Mei 2025",
-    category: "Vulnerabilities",
-    readTime: "6 menit",
-    image: "/api/placeholder/600/400",
-    trending: true
+    name: "Detik",
+    baseUrl: "https://api-berita-indonesia.vercel.app", 
+    endpoint: "/detik/detikinet"
   },
   {
-    id: 3,
-    title: "Kecerdasan Buatan Dimanfaatkan untuk Mendeteksi Serangan Phishing yang Canggih",
-    summary: "Pengembangan terbaru dalam teknologi AI telah menghasilkan sistem yang dapat mendeteksi upaya phishing canggih dengan akurasi hingga 98%, memberikan harapan baru dalam perlindungan pengguna.",
-    author: "AI Security Expert",
-    date: "7 Mei 2025",
-    category: "AI & Security",
-    readTime: "5 menit",
-    image: "/api/placeholder/600/400",
-    featured: true
+    name: "Kompas",
+    baseUrl: "https://api-berita-indonesia.vercel.app",
+    endpoint: "/kompas/tekno"
   },
   {
-    id: 4,
-    title: "Regulasi Keamanan Siber Baru Diberlakukan di Uni Eropa",
-    summary: "UE mengesahkan serangkaian peraturan keamanan siber komprehensif baru yang mewajibkan perusahaan untuk menerapkan standar keamanan yang lebih ketat dan melaporkan insiden dalam waktu 24 jam.",
-    author: "Cyber Policy Analyst",
-    date: "5 Mei 2025",
-    category: "Regulations",
-    readTime: "7 menit",
-    image: "/api/placeholder/600/400"
+    name: "Antara",
+    baseUrl: "https://api-berita-indonesia.vercel.app",
+    endpoint: "/antara/tekno"
   },
   {
-    id: 5,
-    title: "Ancaman Baru: Supply Chain Attack Menargetkan Perangkat Lunak Open Source",
-    summary: "Para ahli keamanan mengidentifikasi pola serangan baru yang memasukkan kode berbahaya ke dalam dependensi perangkat lunak open source populer, mempengaruhi ribuan aplikasi downstream.",
-    author: "Open Source Guardian",
-    date: "2 Mei 2025",
-    category: "Threats & Attacks",
-    readTime: "9 menit",
-    image: "/api/placeholder/600/400"
+    name: "BSSN",
+    baseUrl: "https://api-berita-indonesia.vercel.app",
+    endpoint: "/kompas/tekno"
   },
   {
-    id: 6,
-    title: "Teknik Digital Forensics Terbaru untuk Menyelidiki Serangan Siber Lanjutan",
-    summary: "Metode forensik digital baru dikembangkan untuk menganalisis serangan APT (Advanced Persistent Threat) yang semakin canggih dan dapat menghindari deteksi tradisional.",
-    author: "Forensic Investigator",
-    date: "28 April 2025",
-    category: "Digital Forensics",
-    readTime: "10 menit",
-    image: "/api/placeholder/600/400"
+    name: "Kominfo",
+    baseUrl: "https://api-berita-indonesia.vercel.app",
+    endpoint: "/kompas/tekno"
   },
+  {
+    name: "CyberNews",
+    baseUrl: "https://api-berita-indonesia.vercel.app",
+    endpoint: "/cnn/teknologi"
+  }
 ];
 
-// Kategori dan tag untuk filter
-const categories = [
-  "Threats & Attacks", 
-  "Vulnerabilities", 
-  "AI & Security", 
-  "Regulations", 
-  "Digital Forensics", 
-  "Cloud Security", 
-  "Network Security"
+// Enhanced cyber keywords for better filtering
+const CYBER_KEYWORDS = [
+  'cyber', 'siber', 'hacker', 'hack', 'keamanan', 'security', 'data', 'privasi', 'privacy',
+  'peretasan', 'malware', 'virus', 'ransomware', 'phishing', 'breach', 'kebocoran',
+  'enkripsi', 'firewall', 'antivirus', 'spam', 'scam', 'fraud', 'penipuan online',
+  'digital forensik', 'penetration testing', 'vulnerability', 'exploit', 'botnet',
+  'ddos', 'sql injection', 'xss', 'csrf', 'authentication', 'authorization',
+  'biometric', 'two factor', '2fa', 'otp', 'ssl', 'tls', 'vpn', 'blockchain',
+  'cryptocurrency', 'bitcoin', 'mining', 'wallet', 'exchange hack', 'defi',
+  'artificial intelligence', 'machine learning', 'ai security', 'deepfake',
+  'iot security', 'smart home', 'connected device', 'industrial control',
+  'scada', 'critical infrastructure', 'power grid', 'water system',
+  'kominfo', 'bssn', 'csirt', 'cert', 'iso 27001', 'gdpr', 'pci dss'
+];
+
+// Fetch from multiple API sources
+const fetchFromMultipleSources = async () => {
+  const allArticles = [];
+  
+  for (const source of API_SOURCES) {
+    try {
+      console.log(`Fetching from ${source.name}...`);
+      const response = await fetch(`${source.baseUrl}${source.endpoint}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data && data.data.posts) {
+          const articles = data.data.posts.map(article => ({
+            ...article,
+            source: source.name
+          }));
+          allArticles.push(...articles);
+        }
+      }
+    } catch (error) {
+      console.warn(`Failed to fetch from ${source.name}:`, error);
+    }
+  }
+  
+  return allArticles;
+};
+
+// Enhanced filtering function
+const filterCyberNews = (articles) => {
+  return articles.filter(article => {
+    const title = (article.title || '').toLowerCase();
+    const description = (article.description || '').toLowerCase();
+    const content = `${title} ${description}`;
+    
+    return CYBER_KEYWORDS.some(keyword => content.includes(keyword.toLowerCase()));
+  });
+};
+
+// Process and format articles
+const processArticles = (articles) => {
+  return articles.map((article, index) => ({
+    id: `${article.link}-${index}` || `article-${index}`,
+    title: article.title || 'Judul tidak tersedia',
+    summary: article.description || 'Deskripsi tidak tersedia. Klik untuk membaca selengkapnya.',
+    author: article.creator || article.source || 'Tim Redaksi',
+    date: article.pubDate ? new Date(article.pubDate).toLocaleDateString('id-ID') : new Date().toLocaleDateString('id-ID'),
+    category: getEnhancedCategory(article.title || ''),
+    readTime: `${Math.max(2, Math.floor((article.title?.length || 50) / 40))} menit`,
+    image: article.thumbnail || article.image || "/api/placeholder/400/250",
+    url: article.link || '#',
+    trending: index < 5,
+    featured: index === 0,
+    source: article.source || 'Unknown'
+  }));
+};
+
+// Enhanced category determination
+const getEnhancedCategory = (title) => {
+  const lcTitle = title.toLowerCase();
+  
+  if (lcTitle.includes('hacker') || lcTitle.includes('serangan') || lcTitle.includes('attack') || lcTitle.includes('breach')) {
+    return 'Serangan Siber';
+  }
+  if (lcTitle.includes('data') || lcTitle.includes('privasi') || lcTitle.includes('privacy') || lcTitle.includes('kebocoran')) {
+    return 'Privasi Data';  
+  }
+  if (lcTitle.includes('ai') || lcTitle.includes('artificial') || lcTitle.includes('machine learning') || lcTitle.includes('deepfake')) {
+    return 'AI & Keamanan';
+  }
+  if (lcTitle.includes('crypto') || lcTitle.includes('bitcoin') || lcTitle.includes('blockchain') || lcTitle.includes('defi')) {
+    return 'Kripto & Blockchain';
+  }
+  if (lcTitle.includes('iot') || lcTitle.includes('smart') || lcTitle.includes('connected')) {
+    return 'IoT Security';
+  }
+  if (lcTitle.includes('mobile') || lcTitle.includes('android') || lcTitle.includes('ios') || lcTitle.includes('app')) {
+    return 'Mobile Security';
+  }
+  
+  return 'Keamanan Digital';
+};
+
+const categories = ["Serangan Siber", "Privasi Data", "AI & Keamanan", "Kripto & Blockchain", "IoT Security", "Mobile Security", "Keamanan Digital"];
+
+// Comprehensive fallback articles with current cyber threats
+const fallbackArticles = [
+  {
+    id: "fallback-1",
+    title: "Peningkatan Serangan Siber Terhadap Infrastruktur Kritis Indonesia",
+    summary: "BSSN melaporkan peningkatan 300% serangan siber terhadap infrastruktur kritis nasional dalam 6 bulan terakhir, terutama sektor energi dan transportasi.",
+    author: "BSSN Indonesia",
+    date: new Date().toLocaleDateString('id-ID'),
+    category: "Serangan Siber",
+    readTime: "4 menit",
+    image: "/api/placeholder/400/250",
+    url: "#",
+    trending: true,
+    featured: true,
+    source: "BSSN"
+  },
+  {
+    id: "fallback-2", 
+    title: "Kebocoran Data 15 Juta Pengguna E-wallet Indonesia",
+    summary: "Investigasi menunjukkan data pribadi dan finansial jutaan pengguna dompet digital Indonesia bocor akibat kerentanan sistem keamanan.",
+    author: "Tim Cyber Security",
+    date: new Date().toLocaleDateString('id-ID'),
+    category: "Privasi Data",
+    readTime: "5 menit", 
+    image: "/api/placeholder/400/250",
+    url: "#",
+    trending: true,
+    featured: false,
+    source: "CyberNews"
+  },
+  {
+    id: "fallback-3",
+    title: "AI Deepfake Digunakan untuk Penipuan di Media Sosial Indonesia",
+    summary: "Kepolisian mengungkap modus baru penipuan menggunakan teknologi deepfake untuk meniru tokoh publik dan meminta transfer uang.",
+    author: "Polda Metro Jaya",
+    date: new Date().toLocaleDateString('id-ID'),
+    category: "AI & Keamanan",
+    readTime: "3 menit",
+    image: "/api/placeholder/400/250", 
+    url: "#",
+    trending: false,
+    featured: false,
+    source: "Polri"
+  },
+  {
+    id: "fallback-4",
+    title: "Ransomware Baru Sasar UMKM Indonesia Melalui WhatsApp Business",
+    summary: "Varian ransomware terbaru menginfeksi sistem UMKM melalui lampiran WhatsApp Business palsu, mengenkripsi data penting bisnis.",
+    author: "ID-CERT",
+    date: new Date().toLocaleDateString('id-ID'),
+    category: "Serangan Siber",
+    readTime: "4 menit",
+    image: "/api/placeholder/400/250",
+    url: "#", 
+    trending: true,
+    featured: false,
+    source: "ID-CERT"
+  },
+  {
+    id: "fallback-5",
+    title: "Kominfo Wajibkan Sertifikasi Keamanan untuk Aplikasi Fintech",
+    summary: "Regulasi baru mengharuskan semua aplikasi finansial teknologi mengantongi sertifikat keamanan siber sebelum beroperasi di Indonesia.",
+    author: "Kementerian Kominfo",
+    date: new Date().toLocaleDateString('id-ID'),
+    category: "Keamanan Digital",
+    readTime: "3 menit",
+    image: "/api/placeholder/400/250",
+    url: "#",
+    trending: false,
+    featured: false,
+    source: "Kominfo"
+  },
+  {
+    id: "fallback-6",
+    title: "Crypto Exchange Indonesia Kehilangan $50 Juta Akibat Hack",
+    summary: "Bursa cryptocurrency terbesar di Indonesia mengalami peretasan yang mengakibatkan kerugian miliaran rupiah dan pembekuan akun pengguna.",
+    author: "Blockchain Security",
+    date: new Date().toLocaleDateString('id-ID'),
+    category: "Kripto & Blockchain", 
+    readTime: "6 menit",
+    image: "/api/placeholder/400/250",
+    url: "#",
+    trending: true,
+    featured: false,
+    source: "CryptoNews"
+  }
 ];
 
 export default function CyberEduPortal() {
-  const [articles, setArticles] = useState(cybersecurityArticles);
+  const [articles, setArticles] = useState(fallbackArticles);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-  // Filter articles based on search and category
-  useEffect(() => {
-    let filteredArticles = cybersecurityArticles;
+  const [loading, setLoading] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState(new Date());
+  const [apiStatus, setApiStatus] = useState("fallback");
+
+  const loadArticles = async () => {
+    setLoading(true);
+    setApiStatus("loading");
     
-    if (searchTerm) {
-      filteredArticles = filteredArticles.filter(article => 
-        article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        article.summary.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+    try {
+      console.log("Starting to fetch articles from multiple sources...");
+      const allArticles = await fetchFromMultipleSources();
+      
+      if (allArticles.length > 0) {
+        console.log(`Found ${allArticles.length} total articles`);
+        const cyberArticles = filterCyberNews(allArticles);
+        console.log(`Filtered to ${cyberArticles.length} cyber-related articles`);
+        
+        if (cyberArticles.length > 0) {
+          const processedArticles = processArticles(cyberArticles);
+          setArticles(processedArticles);
+          setApiStatus("success");
+          setLastUpdate(new Date());
+          console.log("Successfully loaded API articles");
+        } else {
+          console.log("No cyber articles found, using fallback");
+          setArticles(fallbackArticles);
+          setApiStatus("no-cyber-news");
+        }
+      } else {
+        console.log("No articles found from APIs, using fallback");
+        setArticles(fallbackArticles);
+        setApiStatus("api-failed");
+      }
+    } catch (error) {
+      console.error('Error loading articles:', error);
+      setArticles(fallbackArticles);
+      setApiStatus("error");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => { 
+    loadArticles(); 
+  }, []);
+
+  const filteredArticles = articles.filter(article => {
+    const matchesSearch = searchTerm === "" || 
+      article.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      article.summary.toLowerCase().includes(searchTerm.toLowerCase());
     
-    if (selectedCategory) {
-      filteredArticles = filteredArticles.filter(article => 
-        article.category === selectedCategory
-      );
+    const matchesCategory = selectedCategory === "" || article.category === selectedCategory;
+    
+    return matchesSearch && matchesCategory;
+  });
+
+  const getStatusMessage = () => {
+    switch(apiStatus) {
+      case "loading": return "Memuat berita terbaru...";
+      case "success": return `Berhasil memuat ${articles.length} berita cyber dari berbagai sumber`;
+      case "no-cyber-news": return "Tidak ada berita cyber terbaru, menampilkan konten fallback";
+      case "api-failed": return "API tidak dapat diakses, menampilkan berita fallback";
+      case "error": return "Terjadi kesalahan, menampilkan berita fallback";
+      default: return "Menampilkan berita cyber terbaru";
     }
-    
-    setArticles(filteredArticles);
-  }, [searchTerm, selectedCategory]);
+  };
+
+  const getStatusColor = () => {
+    switch(apiStatus) {
+      case "success": return "text-green-700 bg-green-50 border-green-200";
+      case "loading": return "text-blue-700 bg-blue-50 border-blue-200";
+      default: return "text-yellow-700 bg-yellow-50 border-yellow-200";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-blue-900 to-blue-700 text-white">
-        <div className="container mx-auto px-4 py-6 flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <div className="bg-blue-500 p-2 rounded-full">
-              <BookOpen size={24} />
+      <Header />
+
+      {/* kasih jarak */}
+      <div className="h-16"></div>
+      
+      {/* Enhanced Status Bar */}
+      <div className={`border-b ${getStatusColor()}`}>
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+            <div className="text-sm">
+              <div className="font-medium">{getStatusMessage()}</div>
+              <div className="text-xs opacity-75">
+                Update terakhir: {lastUpdate.toLocaleTimeString('id-ID')}
+              </div>
             </div>
-            <h1 className="text-2xl font-bold">CyberEdu Education bla</h1>
+            <button
+              onClick={loadArticles}
+              disabled={loading}
+              className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 text-sm"
+            >
+              {loading ? <Loader2 className="animate-spin mr-2" size={16} /> : <RefreshCw size={16} className="mr-2" />}
+              {loading ? "Memuat..." : "Refresh Berita"}
+            </button>
           </div>
-          
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-6">
-            <a href="#" className="hover:text-blue-200 font-medium">Home</a>
-            <a href="#" className="hover:text-blue-200 font-medium">Articles</a>
-            <a href="#" className="hover:text-blue-200 font-medium">Categories</a>
-            <a href="#" className="hover:text-blue-200 font-medium">About</a>
-            <a href="#" className="hover:text-blue-200 font-medium">Contact</a>
-          </nav>
-          
-          {/* Mobile menu button */}
-          <button 
-            className="md:hidden text-white"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
-        
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-blue-800 px-4 py-2">
-            <nav className="flex flex-col space-y-2">
-              <a href="#" className="hover:text-blue-200 py-2 border-b border-blue-700">Home</a>
-              <a href="#" className="hover:text-blue-200 py-2 border-b border-blue-700">Articles</a>
-              <a href="#" className="hover:text-blue-200 py-2 border-b border-blue-700">Categories</a>
-              <a href="#" className="hover:text-blue-200 py-2 border-b border-blue-700">About</a>
-              <a href="#" className="hover:text-blue-200 py-2">Contact</a>
-            </nav>
-          </div>
-        )}
-      </header>
+      </div>
 
       {/* Hero Section */}
-      <section className="bg-blue-800 text-white py-12 md:py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Stay Updated with Latest Cybersecurity News</h2>
-            <p className="text-lg md:text-xl mb-8 text-blue-100">Explore the latest trends, threats, and innovations in the cyber world</p>
-            
-            {/* Search Bar */}
-            <div className="relative max-w-xl mx-auto">
-              <input
-                type="text"
-                placeholder="Search for articles, topics, or keywords..."
-                className="w-full px-4 py-3 pl-12 rounded-lg text-gray-800"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <Search className="absolute left-4 top-3.5 text-gray-500" size={20} />
-            </div>
+      <section className="bg-gradient-to-r from-blue-800 to-indigo-800 text-white py-12">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold mb-4">Portal Berita Keamanan Siber Indonesia</h2>
+          <p className="text-blue-100 mb-8 text-lg">Update terkini dunia cybersecurity, privasi data, dan teknologi keamanan digital</p>
+          <div className="relative max-w-xl mx-auto">
+            <Search className="absolute left-4 top-3.5 text-gray-500" size={20} />
+            <input
+              type="text"
+              placeholder="Cari berita cybersecurity, hacker, data breach..."
+              className="w-full px-4 py-3 pl-12 rounded-lg text-gray-800"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-8">
         {/* Category Filter */}
-        <div className="mb-8 overflow-x-auto">
-          <div className="flex space-x-2 pb-2">
-            <button 
-              className={`px-4 py-2 rounded-full text-sm whitespace-nowrap ${
-                selectedCategory === "" 
-                  ? "bg-blue-600 text-white" 
-                  : "bg-gray-200 hover:bg-gray-300"
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold mb-4">Filter Kategori</h3>
+          <div className="flex flex-wrap gap-2">
+            <button
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                selectedCategory === "" ? "bg-blue-600 text-white" : "bg-gray-200 hover:bg-gray-300"
               }`}
               onClick={() => setSelectedCategory("")}
             >
-              All Categories
+              Semua ({articles.length})
             </button>
-            
-            {categories.map(category => (
-              <button 
-                key={category}
-                className={`px-4 py-2 rounded-full text-sm whitespace-nowrap ${
-                  selectedCategory === category 
-                    ? "bg-blue-600 text-white" 
-                    : "bg-gray-200 hover:bg-gray-300"
-                }`}
-                onClick={() => setSelectedCategory(category)}
-              >
-                {category}
-              </button>
+            {categories.map(cat => {
+              const count = articles.filter(a => a.category === cat).length;
+              return (
+                <button
+                  key={cat}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    selectedCategory === cat ? "bg-blue-600 text-white" : "bg-gray-200 hover:bg-gray-300"
+                  }`}
+                  onClick={() => setSelectedCategory(cat)}
+                >
+                  {cat} ({count})
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Results Info */}
+        <div className="mb-6">
+          <p className="text-gray-600">
+            Menampilkan {filteredArticles.length} artikel
+            {searchTerm && ` untuk "${searchTerm}"`}
+            {selectedCategory && ` dalam kategori "${selectedCategory}"`}
+          </p>
+        </div>
+
+        {/* Articles */}
+        {filteredArticles.length === 0 ? (
+          <div className="text-center py-12">
+            <AlertTriangle className="mx-auto mb-4 text-gray-400" size={48} />
+            <p className="text-gray-500 mb-4">Tidak ada artikel yang ditemukan dengan filter saat ini</p>
+            <button
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+              onClick={() => {
+                setSearchTerm("");
+                setSelectedCategory("");
+              }}
+            >
+              Reset Semua Filter
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredArticles.map(article => (
+              <ArticleCard key={article.id} article={article} />
             ))}
           </div>
-        </div>
-
-        {/* Featured Article */}
-        {articles.find(article => article.featured) && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 flex items-center">
-              <span className="bg-yellow-400 p-1 rounded mr-2"></span>
-              Featured Article
-            </h2>
-            
-            {(() => {
-              const featuredArticle = articles.find(article => article.featured);
-              return featuredArticle ? (
-                <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                  <div className="md:flex">
-                    <div className="md:w-1/2">
-                      <img 
-                        src={featuredArticle.image} 
-                        alt={featuredArticle.title}
-                        className="w-full h-64 md:h-full object-cover"
-                      />
-                    </div>
-                    <div className="md:w-1/2 p-6 md:p-8">
-                      <div className="flex items-center text-sm text-gray-500 mb-4">
-                        <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">{featuredArticle.category}</span>
-                        <span className="ml-4 flex items-center"><Clock size={14} className="mr-1" /> {featuredArticle.readTime}</span>
-                      </div>
-                      <h3 className="text-xl md:text-2xl font-bold mb-4">{featuredArticle.title}</h3>
-                      <p className="text-gray-600 mb-6">{featuredArticle.summary}</p>
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center">
-                          <div className="bg-gray-200 rounded-full p-2 mr-2">
-                            <User size={16} />
-                          </div>
-                          <span className="text-sm">{featuredArticle.author}</span>
-                        </div>
-                        <button className="flex items-center text-blue-600 font-medium hover:text-blue-800">
-                          Read more <ArrowRight size={16} className="ml-1" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : null;
-            })()}
-          </div>
         )}
-
-        {/* Trending Articles */}
-        {articles.some(article => article.trending) && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 flex items-center">
-              <span className="bg-red-500 p-1 rounded mr-2"></span>
-              Trending Now
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {articles
-                .filter(article => article.trending)
-                .map(article => (
-                  <div key={article.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                    <img 
-                      src={article.image} 
-                      alt={article.title} 
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="p-6">
-                      <div className="flex items-center text-sm text-gray-500 mb-3">
-                        <span className="flex items-center"><Tag size={14} className="mr-1" /> {article.category}</span>
-                        <span className="mx-2">•</span>
-                        <span className="flex items-center"><Clock size={14} className="mr-1" /> {article.readTime}</span>
-                      </div>
-                      <h3 className="text-xl font-bold mb-3">{article.title}</h3>
-                      <p className="text-gray-600 mb-4">{article.summary}</p>
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center">
-                          <div className="bg-gray-200 rounded-full p-2 mr-2">
-                            <User size={16} />
-                          </div>
-                          <span className="text-sm">{article.author}</span>
-                        </div>
-                        <span className="text-sm text-gray-500">{article.date}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
-
-        {/* All Articles */}
-        <div>
-          <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <span className="bg-blue-600 p-1 rounded mr-2"></span>
-            Latest Articles
-          </h2>
-          
-          {articles.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-md p-8 text-center">
-              <p className="text-gray-500 text-lg">No articles found matching your criteria.</p>
-              <button 
-                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                onClick={() => {
-                  setSearchTerm("");
-                  setSelectedCategory("");
-                }}
-              >
-                Clear filters
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {articles
-                .filter(article => !article.featured)
-                .map(article => (
-                  <div key={article.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                    <img 
-                      src={article.image} 
-                      alt={article.title} 
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="p-5">
-                      <div className="flex items-center text-xs text-gray-500 mb-2">
-                        <span className="bg-gray-100 px-2 py-1 rounded">{article.category}</span>
-                        <span className="mx-2">•</span>
-                        <span className="flex items-center"><Clock size={12} className="mr-1" /> {article.readTime}</span>
-                      </div>
-                      <h3 className="text-lg font-bold mb-2">{article.title}</h3>
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">{article.summary}</p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-500">{article.date}</span>
-                        <button className="text-blue-600 text-sm flex items-center hover:text-blue-800">
-                          Read more <ChevronRight size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          )}
-        </div>
       </main>
-
-      {/* Newsletter Section */}
-      <section className="bg-gray-100 py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl font-bold mb-4">Subscribe to Our Newsletter</h2>
-            <p className="text-gray-600 mb-6">Get the latest cybersecurity news and updates delivered straight to your inbox</p>
-            <div className="flex flex-col md:flex-row gap-3">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="flex-grow px-4 py-3 rounded-lg"
-              />
-              <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium">
-                Subscribe
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-800 text-gray-300 py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-6">
-                <div className="bg-blue-500 p-2 rounded-full">
-                  <BookOpen size={18} />
-                </div>
-                <h3 className="text-xl font-bold text-white">CyberEdu</h3>
-              </div>
-              <p className="mb-6">Your trusted source for the latest cybersecurity news, trends, and educational resources.</p>
-              <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
-                  </svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z"></path>
-                  </svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"></path>
-                  </svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.441 16.892c-2.102.144-6.784.144-8.883 0-2.276-.156-2.541-1.27-2.558-4.892.017-3.629.285-4.736 2.558-4.892 2.099-.144 6.782-.144 8.883 0 2.277.156 2.541 1.27 2.559 4.892-.018 3.629-.285 4.736-2.559 4.892zm-6.441-7.234l4.917 2.338-4.917 2.346v-4.684z"></path>
-                  </svg>
-                </a>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="text-white font-bold mb-4">Categories</h4>
-              <ul className="space-y-2">
-                {categories.slice(0, 5).map(category => (
-                  <li key={category}>
-                    <a href="#" className="hover:text-white">{category}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="text-white font-bold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:text-white">Home</a></li>
-                <li><a href="#" className="hover:text-white">Articles</a></li>
-                <li><a href="#" className="hover:text-white">About Us</a></li>
-                <li><a href="#" className="hover:text-white">Contact</a></li>
-                <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="text-white font-bold mb-4">Contact Us</h4>
-              <ul className="space-y-2">
-                <li>info@cyberedu.com</li>
-                <li>+1 (555) 123-4567</li>
-                <li>123 Cyber Street, Digital City</li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-            <p>&copy; {new Date().getFullYear()} CyberEdu. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Futer />
     </div>
   );
 }
+
+// Enhanced Article Card Component
+const ArticleCard = ({ article }) => {
+  const getCategoryIcon = (category) => {
+    switch(category) {
+      case 'Serangan Siber': return <AlertTriangle size={12} />;
+      case 'Privasi Data': return <Database size={12} />;
+      case 'AI & Keamanan': return <Cpu size={12} />;
+      default: return <Shield size={12} />;
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+      <div className="relative">
+        <img src={article.image} alt={article.title} className="w-full h-48 object-cover" />
+        {article.trending && (
+          <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+            TRENDING
+          </div>
+        )}
+        {article.featured && (
+          <div className="absolute top-3 right-3 bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-bold">
+            FEATURED
+          </div>
+        )}
+      </div>
+      
+      <div className="p-5">
+        <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
+          <span className="bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1">
+            {getCategoryIcon(article.category)}
+            {article.category}
+          </span>
+          <span className="flex items-center">
+            <Clock size={12} className="mr-1" /> {article.readTime}
+          </span>
+        </div>
+        
+        <h3 className="text-lg font-bold mb-3 line-clamp-2 hover:text-blue-600 transition-colors">
+          {article.title}
+        </h3>
+        
+        <p className="text-gray-600 text-sm mb-4 line-clamp-3">{article.summary}</p>
+        
+        <div className="flex justify-between items-center">
+          <div className="text-xs text-gray-500">
+            <div>{article.author}</div>
+            <div>{article.date}</div>
+          </div>
+          <a 
+            href={article.url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm flex items-center hover:bg-blue-700 transition-colors"
+          >
+            Baca <ChevronRight size={14} className="ml-1" />
+          </a>
+        </div>
+        
+        <div className="mt-3 pt-3 border-t border-gray-100">
+          <span className="text-xs text-gray-400">Sumber: {article.source}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Enhanced Footer Component
+const Futer = () => (
+  <footer className="bg-gray-800 text-gray-300 py-12 mt-12">
+    <Footer />
+  </footer>
+);

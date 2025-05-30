@@ -1,215 +1,450 @@
-import { useState } from 'react';
-import { Shield, Book, Newspaper, MessageCircle, User, Lock, ChevronDown, Menu, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Shield, Book, Newspaper, MessageCircle, User, Lock, ChevronDown, Menu, X, Star, Users, Clock, ArrowRight, PlayCircle, Award } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import Headeer from './Headeer';
+import Footer from './Footer';
 
-// Navbar Component
-const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+// Enhanced Animation variants
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, y: 30 },
+  show: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { duration: 1 } }
+};
+
+const slideInFromLeft = {
+  hidden: { opacity: 0, x: -60 },
+  show: { 
+    opacity: 1, 
+    x: 0, 
+    transition: { 
+      duration: 0.8,
+      ease: "easeOut"
+    } 
+  }
+};
+
+const slideInFromRight = {
+  hidden: { opacity: 0, x: 60 },
+  show: { 
+    opacity: 1, 
+    x: 0, 
+    transition: { 
+      duration: 0.8,
+      ease: "easeOut"
+    } 
+  }
+};
+
+const scaleUp = {
+  hidden: { opacity: 0, scale: 0.8 },
+  show: { 
+    opacity: 1, 
+    scale: 1, 
+    transition: { 
+      duration: 0.6,
+      ease: "easeOut"
+    } 
+  }
+};
+
+// Enhanced News Component
+const BeritaCyberIndonesia = () => {
+  const [berita, setBerita] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchBeritaCyber = async () => {
+      try {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Fallback data with better content
+        setBerita([
+          {
+            id: 1,
+            title: "Kominfo Tingkatkan Keamanan Cyber Nasional 2024",
+            description: "Kementerian Kominfo meluncurkan program baru untuk meningkatkan keamanan siber di Indonesia dengan investasi Rp 500 miliar...",
+            link: "/berita/1",
+            thumbnail: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400&h=250&fit=crop",
+            category: "Kebijakan",
+            date: "2 hari lalu"
+          },
+          {
+            id: 2,
+            title: "Serangan Ransomware Meningkat 40% di Asia Tenggara",
+            description: "Laporan terbaru menunjukkan peningkatan drastis serangan ransomware yang menargetkan sektor perbankan dan kesehatan...",
+            link: "/berita/2",
+            thumbnail: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=250&fit=crop",
+            category: "Ancaman",
+            date: "1 minggu lalu"
+          },
+          {
+            id: 3,
+            title: "Indonesia Luncurkan Sertifikasi Cyber Security Nasional",
+            description: "Program sertifikasi baru untuk meningkatkan kompetensi profesional keamanan siber di Indonesia...",
+            link: "/berita/3",
+            thumbnail: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=250&fit=crop",
+            category: "Pendidikan",
+            date: "3 hari lalu"
+          },
+          {
+            id: 4,
+            title: "AI dan Machine Learning dalam Deteksi Ancaman Cyber",
+            description: "Implementasi teknologi AI terbaru untuk mendeteksi dan mencegah serangan siber secara real-time...",
+            link: "/berita/4",
+            thumbnail: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=250&fit=crop",
+            category: "Teknologi",
+            date: "5 hari lalu"
+          }
+        ]);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBeritaCyber();
+  }, []);
+
+  const handleBeritaClick = (id) => {
+    navigate(`/berita/${id}`);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-16">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
 
   return (
-    <nav className="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-3">
-        <div className="flex justify-between items-center">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <Shield className="h-8 w-8" />
-            <span className="text-xl font-bold">CyberEdu</span>
-          </div>
+    <div className="container mx-auto px-4">
+      <div className="text-center mb-12">
+        <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+          Berita Cyber Terkini
+        </h2>
+        <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+          Dapatkan informasi terbaru tentang perkembangan keamanan siber di Indonesia dan dunia
+        </p>
+      </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
-            <a href="/" className="hover:text-indigo-200 transition">Beranda</a>
-            <a href="/materi" className="hover:text-indigo-200 transition">Materi</a>
-            <a href="/berita" className="hover:text-indigo-200 transition">Berita</a>
-            <a href="/forum" className="hover:text-indigo-200 transition">Forum Diskusi</a>
-            <a href="#" className="hover:text-indigo-200 transition">Tentang Kami</a>
-          </div>
-
-          {/* Authentication Buttons */}
-          <div className="hidden md:flex items-center space-x-3">
-            <a href="/login" className="px-4 py-2 border border-indigo-300 rounded-md hover:bg-indigo-600 transition">Masuk</a>
-            <a href="/login" className="px-4 py-2 bg-indigo-500 rounded-md hover:bg-indigo-400 transition">Daftar</a>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button 
-              className="focus:outline-none" 
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 space-y-3">
-            <a href="/beranda" className="block hover:bg-indigo-600 px-3 py-2 rounded-md">Beranda</a>
-            <a href="/materi" className="block hover:bg-indigo-600 px-3 py-2 rounded-md">Materi</a>
-            <a href="/berita" className="block hover:bg-indigo-600 px-3 py-2 rounded-md">Berita</a>
-            <a href="/forum" className="block hover:bg-indigo-600 px-3 py-2 rounded-md">Forum Diskusi</a>
-            <a href="#" className="block hover:bg-indigo-600 px-3 py-2 rounded-md">Tentang Kami</a>
-            <div className="flex space-x-3 pt-3 border-t border-indigo-600">
-              <a href="/login" className="px-4 py-2 border border-indigo-300 rounded-md hover:bg-indigo-600 transition w-full text-center">Masuk</a>
-              <a href="/login" className="px-4 py-2 bg-indigo-500 rounded-md hover:bg-indigo-400 transition w-full text-center">Daftar</a>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {berita.map((item) => (
+          <div 
+            key={item.id}
+            className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer"
+            onClick={() => handleBeritaClick(item.id)}
+          >
+            <div className="relative overflow-hidden">
+              <img 
+                src={item.thumbnail} 
+                alt={item.title}
+                className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute top-4 left-4">
+                <span className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium">
+                  {item.category}
+                </span>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <div className="p-6">
+              <div className="flex items-center text-gray-500 text-sm mb-3">
+                <Clock className="h-4 w-4 mr-1" />
+                {item.date}
+              </div>
+              <h3 className="text-lg font-bold mb-3 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                {item.title}
+              </h3>
+              <p className="text-gray-600 mb-4 line-clamp-3 text-sm leading-relaxed">
+                {item.description}
+              </p>
+              <div className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold group-hover:gap-2 transition-all duration-300">
+                Baca Selengkapnya
+                <ArrowRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" />
+              </div>
             </div>
           </div>
-        )}
+        ))}
       </div>
-    </nav>
+    </div>
   );
 };
 
-// Main Section Component
+// Main Component
 const MainSection = () => {
+  const navigate = useNavigate();
+
+  const handleButtonClick = (path) => {
+    navigate(path);
+  };
+
   return (
     <main>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-indigo-800 to-blue-700 text-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-10 md:mb-0">
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">Tingkatkan Pengetahuan Keamanan Cyber Anda</h1>
-              <p className="text-lg mb-8">Pelajari cara melindungi diri dan organisasi Anda dari ancaman digital dengan materi dan komunitas terpercaya.</p>
-              <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 justify-center">
-                <a href="/materi" className="px-6 py-3 bg-white text-indigo-700 font-medium rounded-md hover:bg-indigo-100 transition text-center justify-center">Mulai Belajar</a>
-                <a href="/forum" className="px-6 py-3 border border-white rounded-md hover:bg-indigo-700 transition text-center">Gabung Forum</a>
-              </div>
-            </div>
-            <div className="md:w-1/2">
-              <img src="/src/assets/profil.jpg" alt="Cyber Security Illustration" className="rounded-lg shadow-xl" />
-            </div>
-          </div>
+      {/* Enhanced Hero Section */}
+      <section class="relative min-h-screen flex items-center bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 text-white overflow-hidden">
+        {/* <!-- Animated background elements --> */}
+        <div class="absolute inset-0">
+            <div class="absolute top-1/4 left-1/4 w-32 h-32 md:w-64 md:h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-48 h-48 md:w-96 md:h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+            <div class="absolute top-1/2 left-1/2 w-16 h-16 md:w-32 md:h-32 bg-pink-500/10 rounded-full blur-2xl animate-pulse delay-500"></div>
         </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Fitur Unggulan</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-              <div className="bg-indigo-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-5">
-                <Book className="text-indigo-600 h-7 w-7" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Materi Komprehensif</h3>
-              <p className="text-gray-600">Akses materi lengkap tentang keamanan cyber yang disusun oleh para ahli di bidangnya.</p>
+        
+        <div class="container mx-auto px-4 relative z-10 py-16 md:py-12 pt-24 md:pt-12">
+            <div class="flex flex-col lg:flex-row items-center">
+                <div class="lg:w-1/2 mb-8 lg:mb-0 text-center">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold leading-tight mb-6">
+                        Tingkatkan Pengetahuan 
+                        <span class="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                            Keamanan Siber
+                        </span>
+                        Anda
+                    </h1>
+                    
+                    <p class="text-base md:text-xl mb-8 text-gray-300 max-w-lg mx-auto leading-relaxed"> 
+                        Pelajari keamanan siber dari ahli terpercaya. Dapatkan sertifikasi internasional 
+                        dan bergabung dengan komunitas profesional cybersecurity.
+                    </p>
+                    
+                    <div class="flex justify-center mb-8 lg:mb-12">
+                        <button onClick={() => handleButtonClick('/materi')} class="group bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-base md:text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+                            <i data-lucide="play-circle" class="h-4 w-4 md:h-5 md:w-5 mr-2"></i>
+                            Mulai Belajar Gratis
+                            <i data-lucide="arrow-right" class="h-4 w-4 md:h-5 md:w-5 ml-2 transition-transform group-hover:translate-x-1"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2 relative w-full max-w-md lg:max-w-none mx-auto">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl md:rounded-3xl blur-2xl opacity-30 transform rotate-6"></div>
+                        <img 
+                            src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&h=400&fit=crop" 
+                            alt="Ilustrasi Keamanan Siber" 
+                            class="relative rounded-2xl md:rounded-3xl shadow-2xl transform -rotate-2 transition-transform duration-500 hover:rotate-0 w-full"
+                        />
+                    </div>
+                    
+                    {/* <!-- Kartu mengambang --> */}
+                    <div class="absolute -top-4 -left-4 md:-top-6 md:-left-6 bg-white/90 backdrop-blur-sm rounded-xl md:rounded-2xl p-3 md:p-4 shadow-xl cursor-pointer hover:shadow-2xl transition-all">
+                        <div class="flex items-center space-x-2 md:space-x-3">
+                            <div class="bg-green-500 rounded-full p-1.5 md:p-2">
+                                <i data-lucide="shield" class="h-3 w-3 md:h-4 md:w-4 text-white"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs md:text-sm font-semibold text-gray-800">Berita Terkini</div>
+                                <div class="text-xs text-gray-600">Dari CyberEdu</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-white/90 backdrop-blur-sm rounded-xl md:rounded-2xl p-3 md:p-4 shadow-xl cursor-pointer hover:shadow-2xl transition-all">
+                        <div class="flex items-center space-x-2 md:space-x-3">
+                            <div class="bg-blue-500 rounded-full p-1.5 md:p-2">
+                                <i data-lucide="award" class="h-3 w-3 md:h-4 md:w-4 text-white"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs md:text-sm font-semibold text-gray-800">Materi CyberEdu</div>
+                                <div class="text-xs text-gray-600">Kuis Interaktif</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-              <div className="bg-indigo-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-5">
-                <Newspaper className="text-indigo-600 h-7 w-7" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Berita Terkini</h3>
-              <p className="text-gray-600">Dapatkan informasi terbaru tentang ancaman keamanan dan perkembangan teknologi cyber security.</p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-              <div className="bg-indigo-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-5">
-                <MessageCircle className="text-indigo-600 h-7 w-7" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Forum Diskusi</h3>
-              <p className="text-gray-600">Diskusikan topik keamanan cyber dengan komunitas dan dapatkan jawaban dari para ahli.</p>
-            </div>
-          </div>
         </div>
-      </section>
+    </section>
 
-      {/* Featured Courses */}
-      <section className="py-16">
+      {/* Enhanced Popular Courses */}
+      <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Materi Populer</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+              Materi Pembelajaran CyberEdu
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+              Pilih materi pembelajaran yang sesuai dengan level dan kebutuhan Anda
+            </p>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Course Card 1 */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
-              <img src="/api/placeholder/400/200" alt="Pengenalan Keamanan Cyber" className="w-full h-48 object-cover" />
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-3">
-                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Pemula</span>
-                  <span className="text-gray-500 text-sm">10 Modul</span>
+            {[
+              {
+                id: 1,
+                image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=250&fit=crop",
+                level: "Pemula",
+                levelColor: "bg-green-100 text-green-800",
+                title: "Pengenalan Dasar Keamanan Digital Cyber",
+                description: "Pelajari pengenalan cyber security, manajemen password yang aman, dan  virus/malware."
+              },
+              {
+                id: 2,
+                image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400&h=250&fit=crop",
+                level: "Menengah",
+                levelColor: "bg-yellow-100 text-yellow-800",
+                title: "Teknik Enkripsi, Network Security, & Secure Coding",
+                description: "Kuasai metode enkripsi data, network security, dan secure coding."
+              },
+              {
+                id: 3,
+                image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=250&fit=crop",
+                level: "Lanjut",
+                levelColor: "bg-red-100 text-red-800",
+                title: "Ethical Hacking & Penetration Testing",
+                description: "Teknik hacking etis, SKIM, dan keamanan infrastruktur cloud computing.",
+              }
+            ].map((course) => (
+              <div 
+                key={course.id}
+                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer"
+              >
+                <div className="relative overflow-hidden">
+                  <img 
+                    src={course.image} 
+                    alt={course.title} 
+                    className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className={`${course.levelColor} text-xs px-3 py-1 rounded-full font-medium`}>
+                      {course.level}
+                    </span>
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Pengenalan Keamanan Cyber</h3>
-                <p className="text-gray-600 mb-4">Pelajari dasar-dasar keamanan cyber dan bagaimana melindungi diri secara digital.</p>
-                <a href="#" className="text-indigo-600 font-medium hover:text-indigo-500">Mulai Belajar →</a>
-              </div>
-            </div>
-
-            {/* Course Card 2 */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
-              <img src="/api/placeholder/400/200" alt="Keamanan Jaringan" className="w-full h-48 object-cover" />
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-3">
-                  <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Menengah</span>
-                  <span className="text-gray-500 text-sm">8 Modul</span>
+                
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-indigo-600 transition-colors">
+                    {course.title}
+                  </h3>
+                  <p className="text-gray-600 mb-4 leading-relaxed">
+                    {course.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="flex text-yellow-400 mr-2">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="h-4 w-4 fill-current" />
+                        ))}
+                      </div>
+                      <span className="text-sm font-medium">5.0</span>
+                    </div>
+                    <button 
+                      className="bg-gradient-to-r from-indigo-600 to-indigo-400 text-white px-4 py-2 rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleButtonClick(`/materi`);
+                      }}
+                    >
+                      Mulai Belajar
+                    </button>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Keamanan Jaringan</h3>
-                <p className="text-gray-600 mb-4">Pelajari cara mengamankan jaringan dan melindungi data dari serangan berbahaya.</p>
-                <a href="#" className="text-indigo-600 font-medium hover:text-indigo-500">Mulai Belajar →</a>
               </div>
-            </div>
-
-            {/* Course Card 3 */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
-              <img src="/api/placeholder/400/200" alt="Etika Hacking" className="w-full h-48 object-cover" />
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-3">
-                  <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Lanjutan</span>
-                  <span className="text-gray-500 text-sm">12 Modul</span>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Etika Hacking</h3>
-                <p className="text-gray-600 mb-4">Pelajari teknik ethical hacking untuk mengidentifikasi kerentanan sistem.</p>
-                <a href="#" className="text-indigo-600 font-medium hover:text-indigo-500">Mulai Belajar →</a>
-              </div>
-            </div>
+            ))}
           </div>
-          <div className="text-center mt-10">
-            <a href="#" className="px-6 py-3 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-500 transition">Lihat Semua Materi</a>
+          
+          <div className="text-center mt-12">
+            <button 
+              onClick={() => handleButtonClick('/materi')}
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 flex items-center mx-auto"
+            >
+              Lihat Semua Materi
+              <ArrowRight className="h-5 w-5 ml-2" />
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Recent News */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Berita Terkini</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* News Item 1 */}
-            <div className="flex bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
-              <img src="/api/placeholder/200/200" alt="News Image" className="w-32 h-32 object-cover" />
-              <div className="p-4">
-                <span className="text-gray-500 text-sm">14 Mei 2025</span>
-                <h3 className="text-lg font-semibold mb-2">Tren Serangan Malware Terbaru yang Perlu Diwaspadai</h3>
-                <p className="text-gray-600 line-clamp-2">Pelajari bagaimana melindungi diri dari varian malware terbaru yang menyerang berbagai sektor...</p>
-                <a href="#" className="text-indigo-600 mt-2 inline-block hover:text-indigo-500">Baca selengkapnya</a>
-              </div>
-            </div>
-
-            {/* News Item 2 */}
-            <div className="flex bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
-              <img src="/api/placeholder/200/200" alt="News Image" className="w-32 h-32 object-cover" />
-              <div className="p-4">
-                <span className="text-gray-500 text-sm">10 Mei 2025</span>
-                <h3 className="text-lg font-semibold mb-2">Kebijakan Keamanan Data Indonesia Diperbarui</h3>
-                <p className="text-gray-600 line-clamp-2">Pemerintah resmi menetapkan kebijakan baru terkait perlindungan data pribadi warga negara...</p>
-                <a href="#" className="text-indigo-600 mt-2 inline-block hover:text-indigo-500">Baca selengkapnya</a>
-              </div>
-            </div>
-          </div>
-          <div className="text-center mt-10">
-            <a href="#" className="px-6 py-3 border border-indigo-600 text-indigo-600 font-medium rounded-md hover:bg-indigo-50 transition">Lihat Semua Berita</a>
-          </div>
+      {/* Enhanced News Section */}
+      <section className="py-20 bg-gray-50">
+        <BeritaCyberIndonesia />
+        <div className="text-center mt-12">
+          <button 
+            onClick={() => handleButtonClick('/berita')}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 flex items-center mx-auto"
+          >
+            Lihat Semua Berita
+            <ArrowRight className="h-5 w-5 ml-2" />
+          </button>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-indigo-700 text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Siap Meningkatkan Keamanan Digital Anda?</h2>
-          <p className="text-lg mb-8 max-w-2xl mx-auto">Bergabunglah dengan ribuan pengguna yang telah meningkatkan pengetahuan keamanan cyber mereka bersama CyberEdu.</p>
-          <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
-            <a href="#" className="px-6 py-3 bg-white text-indigo-700 font-medium rounded-md hover:bg-indigo-100 transition">Daftar Sekarang</a>
-            <a href="#" className="px-6 py-3 border border-white rounded-md hover:bg-indigo-600 transition">Pelajari Lebih Lanjut</a>
+      {/* Enhanced CTA Section */}
+      <section className="relative py-20 bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 text-white overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Siap Menjadi 
+              <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Expert Cyber Security?
+              </span>
+            </h2>
+            <p className="text-xl mb-8 text-gray-300 max-w-2xl mx-auto leading-relaxed">
+              Bergabunglah dengan kami untuk mendapatkan akses ke materi pembelajaran dan forum diskusi keamanan siber.
+            </p>
+          
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+              <button 
+                onClick={() => handleButtonClick('/login')}
+                className="group bg-gradient-to-r from-blue-400 to-purple-400 text-black px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+              >
+                Daftar Sekarang - Gratis
+                <ArrowRight className="h-5 w-5 ml-2 transition-transform group-hover:translate-x-1" />
+              </button>
+            </div>
+            
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-300">
+              <div 
+                className="flex items-center transition-colors"
+              >
+                <Star className="h-4 w-4 mr-2 text-blue-400" />
+                Berita Terkini
+              </div>
+              <div 
+                className="flex items-center transition-colors"
+              >
+                <Book className="h-4 w-4 mr-2 text-blue-400" />
+                Materi Pembelajaran
+              </div>
+              <div 
+                className="flex items-center transition-colors"
+              >
+                <Users className="h-4 w-4 mr-2 text-blue-400" />
+                Kuis Interaktif
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -217,78 +452,11 @@ const MainSection = () => {
   );
 };
 
-// Footer Component
-const Footer = () => {
-  return (
-    <footer className="bg-gray-800 text-gray-300">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Logo and description */}
-          <div className="md:col-span-1">
-            <div className="flex items-center space-x-2 mb-4">
-              <Shield className="h-8 w-8" />
-              <span className="text-xl font-bold text-white">CyberEdu</span>
-            </div>
-            <p className="mb-4">Platform edukasi keamanan cyber terkemuka di Indonesia. Belajar dari para ahli dan tingkatkan keamanan digital Anda.</p>
-            <div className="flex space-x-4">
-              <a href="#" className="hover:text-white transition"><svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg></a>
-              <a href="#" className="hover:text-white transition"><svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg></a>
-              <a href="#" className="hover:text-white transition"><svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg></a>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-4">Navigasi</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white transition">Beranda</a></li>
-              <li><a href="/materi" className="hover:text-white transition">Materi</a></li>
-              <li><a href="/berita" className="hover:text-white transition">Berita</a></li>
-              <li><a href="#" className="hover:text-white transition">Forum Diskusi</a></li>
-              <li><a href="#" className="hover:text-white transition">Tentang Kami</a></li>
-            </ul>
-          </div>
-
-          {/* Categories */}
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-4">Kategori Materi</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white transition">Dasar Keamanan</a></li>
-              <li><a href="#" className="hover:text-white transition">Keamanan Jaringan</a></li>
-              <li><a href="#" className="hover:text-white transition">Keamanan Aplikasi Web</a></li>
-              <li><a href="#" className="hover:text-white transition">Ethical Hacking</a></li>
-              <li><a href="#" className="hover:text-white transition">Forensik Digital</a></li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-4">Hubungi Kami</h3>
-            <ul className="space-y-2">
-              <li>Email: info@cyberedu.id</li>
-              <li>Telepon: +62 21 1234 5678</li>
-              <li>Alamat: Jl. Cyber No. 123, Jakarta Selatan, Indonesia</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="border-t border-gray-700 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
-          <p>© 2025 CyberEdu. Hak Cipta Dilindungi.</p>
-          <div className="mt-4 md:mt-0 flex space-x-4">
-            <a href="#" className="hover:text-white transition">Kebijakan Privasi</a>
-            <a href="#" className="hover:text-white transition">Syarat & Ketentuan</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-};
-
-// App Component
+// Main App Component
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <Headeer />
       <MainSection />
       <Footer />
     </div>
