@@ -1,12 +1,84 @@
 import { useState, useEffect } from 'react';
-import { MessageCircle, ThumbsUp, Send, Search, Filter, Users, Award, Clock, ArrowUp, ArrowDown, BookOpen, Coffee } from 'lucide-react';
+import { MessageCircle, ThumbsUp, Send, Search, Filter, Users, Award, Clock, ArrowUp, ArrowDown, BookOpen, Coffee, Shield, Menu, X } from 'lucide-react';
+import axios from 'axios';
+
+//
+function Forum() {
+  const [stats, setStats] = useState(null);
+
+useEffect(() => {
+  axios.get('http://127.0.0.1:8000/api/forum-statistics')
+    .then((response) => {
+      console.log(response.data);
+      setStats(response.data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}, []);
+
+  return (
+    <div>
+      <h1>Forum Statistik</h1>
+      {stats ? (
+        <pre>{JSON.stringify(stats, null, 2)}</pre>
+      ) : (
+        <p>Loading statistik forum...</p>
+      )}
+    </div>
+  );
+}
+
+//
+function ForumStatistics() {
+  const [stats, setStats] = useState({
+    total_topics: 0,
+    total_users: 0,
+    daily_topics: 0,
+    active_contributors: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/forum-statistics');
+        setStats(response.data);
+      } catch (err) {
+        console.error('Gagal ambil data statistik:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading) return <div>Memuat statistik...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div className="mb-6">
+      <h2 className="text-xl font-semibold mb-4">Statistik Forum</h2>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <StatCard icon={<MessageCircle />} title="Total Topik" value={stats.total_topics} />
+        <StatCard icon={<Users />} title="Total Pengguna" value={stats.total_users} />
+        <StatCard icon={<Clock />} title="Topik Hari Ini" value={stats.daily_topics} />
+        <StatCard icon={<Award />} title="Kontributor Aktif" value={stats.active_contributors} />
+      </div>
+    </div>
+  );
+}
+
 
 // Data sample untuk forum
 const initialTopics = [
   {
     id: 1,
     title: "Pengenalan Cybersecurity untuk Pemula",
-    author: "securePro",
+    author: "Adriana Putri",
     avatar: "/api/placeholder/40/40",
     date: "15 Mei 2025",
     content: "Apa saja langkah awal yang harus dilakukan untuk memulai karir di bidang cybersecurity?",
@@ -57,6 +129,7 @@ const initialTopics = [
   },
 ];
 
+
 // Komponen utama Forum
 export default function ForumDiskusiCyberEdu() {
   const [topics, setTopics] = useState(initialTopics);
@@ -69,6 +142,7 @@ export default function ForumDiskusiCyberEdu() {
     tags: ''
   });
   const [selectedTopic, setSelectedTopic] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Filter topics berdasarkan pencarian
   const filteredTopics = topics.filter(topic => 
@@ -121,21 +195,58 @@ export default function ForumDiskusiCyberEdu() {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 to-indigo-700 py-4 px-6 shadow-md">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <BookOpen className="text-white" size={32} />
-            <h1 className="text-2xl font-bold text-white">CyberEdu Forum</h1>
+      {/* Navbar */}
+      <nav className="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex justify-between items-center">
+            {/* Logo */}
+            <div className="flex items-center space-x-2">
+              <Shield className="h-8 w-8" />
+              <span className="text-xl font-bold">CyberEdu</span>
+            </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-6">
+              <a href="/" className="hover:text-indigo-200 transition">Beranda</a>
+              <a href="/materi" className="hover:text-indigo-200 transition">Materi</a>
+              <a href="/berita" className="hover:text-indigo-200 transition">Berita</a>
+              <a href="/forum" className="hover:text-indigo-200 transition">Forum Diskusi</a>
+              <a href="#" className="hover:text-indigo-200 transition">Tentang Kami</a>
+            </div>
+
+            {/* Authentication Buttons */}
+            <div className="hidden md:flex items-center space-x-3">
+              <a href="/login" className="px-4 py-2 border border-indigo-300 rounded-md hover:bg-indigo-600 transition">Masuk</a>
+              <a href="/login" className="px-4 py-2 bg-indigo-500 rounded-md hover:bg-indigo-400 transition">Daftar</a>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center">
+              <button 
+                className="focus:outline-none" 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <button className="flex items-center gap-2 bg-white text-blue-600 px-4 py-2 rounded-md font-medium hover:bg-blue-50 transition">
-              <Coffee size={18} />
-              <span>Login</span>
-            </button>
-          </div>
+
+          {/* Mobile Navigation */}
+          {isMenuOpen && (
+            <div className="md:hidden mt-4 pb-4 space-y-3">
+              <a href="/beranda" className="block hover:bg-indigo-600 px-3 py-2 rounded-md">Beranda</a>
+              <a href="/materi" className="block hover:bg-indigo-600 px-3 py-2 rounded-md">Materi</a>
+              <a href="/berita" className="block hover:bg-indigo-600 px-3 py-2 rounded-md">Berita</a>
+              <a href="/forum" className="block hover:bg-indigo-600 px-3 py-2 rounded-md">Forum Diskusi</a>
+              <a href="#" className="block hover:bg-indigo-600 px-3 py-2 rounded-md">Tentang Kami</a>
+              <div className="flex space-x-3 pt-3 border-t border-indigo-600">
+                <a href="/login" className="px-4 py-2 border border-indigo-300 rounded-md hover:bg-indigo-600 transition w-full text-center">Masuk</a>
+                <a href="/login" className="px-4 py-2 bg-indigo-500 rounded-md hover:bg-indigo-400 transition w-full text-center">Daftar</a>
+              </div>
+            </div>
+          )}
         </div>
-      </header>
+      </nav>
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 py-6">
@@ -264,7 +375,7 @@ export default function ForumDiskusiCyberEdu() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-100 border-t border-gray-200 py-8 mt-12">
+      <footer className="g-white py-4 px-6 border-t text-center text-sm text-gray-600">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center mb-4 md:mb-0">
@@ -327,6 +438,14 @@ function TopicDetail({ topic, onBack }) {
     setComments([...comments, newComment]);
     setComment('');
   };
+
+  const [forumStats, setForumStats] = useState({
+  totalTopics: 0,
+  totalUsers: 0,
+  dailyTopics: 0,
+  activeContributors: 0,
+  loading: true
+});
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden">

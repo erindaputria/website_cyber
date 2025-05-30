@@ -10,8 +10,8 @@ import Quiz from './pages/Quiz'
 import Dashboard from './pages/Navbar'
 import Header from './pages/Header'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Dashboard from './pages/Dashboard'
 import Navbar from './pages/Navbar'
+import TentangKami from './pages/TentangKami'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -25,7 +25,8 @@ function App() {
     <Route path="/forum" element={<Forum />} />
     <Route path="/quiz" element={<Quiz />} />
     <Route path="/" element={<Dashboard />} />
-      <Route path="/header" element={<Header />} />
+    <Route path="/header" element={<Header />} />
+    <Route path="/tentangkami" element={<TentangKami />} />
     </Routes>
    </Router>
   )

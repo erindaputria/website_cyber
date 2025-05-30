@@ -1,5 +1,7 @@
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Shield, Lock, User, Eye, EyeOff, Mail, ArrowRight } from 'lucide-react';
+import axios from "axios";
 
 export default function CyberSecurityAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,11 +10,42 @@ export default function CyberSecurityAuthPage() {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Implementasi logika login/signup di sini
-    console.log(isLogin ? 'Login dengan:' : 'Signup dengan:', { email, password, fullName });
+    setLoading(true);
+    setError('');
+    
+    try {
+      if (isLogin) {
+        // Login logic
+        const response = await axios.post('http://127.0.0.1:8000/api/login', {
+          email,
+          password
+        });
+        
+        console.log('Login successful:', response.data);
+        // Handle successful login (e.g., store token, redirect, etc.)
+      } else {
+        // Signup logic
+        const response = await axios.post('http://127.0.0.1:8000/api/register', {
+          name: fullName,
+          email,
+          password
+        });
+        
+        console.log('Registration successful:', response.data);
+        // Handle successful registration (e.g., show success message, redirect, etc.)
+      }
+    } catch (err) {
+      console.error('Authentication error:', err);
+      setError(err.response?.data?.message || 'An error occurred during authentication');
+    } finally {
+      setLoading(false);
+    }
   };
   
   return (
@@ -57,9 +90,16 @@ export default function CyberSecurityAuthPage() {
             </div>
           </div>
           
+          {/* Error message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              {error}
+            </div>
+          )}
+          
           {/* Form container with fixed height and scroll when needed */}
           <div className="min-h-96 flex flex-col">
-            <div className="space-y-6 flex-1">
+            <form onSubmit={handleSubmit} className="space-y-6 flex-1">
               {/* Full Name Field - Hidden but preserved space in login mode */}
               <div className={isLogin ? 'hidden' : 'block'}>
                 <label className="block text-sm font-medium text-gray-400 mb-2">Nama Lengkap</label>
@@ -73,6 +113,7 @@ export default function CyberSecurityAuthPage() {
                     placeholder="Masukkan nama lengkap"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
+                    required={!isLogin}
                   />
                 </div>
               </div>
@@ -90,6 +131,7 @@ export default function CyberSecurityAuthPage() {
                     placeholder="nama@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                 </div>
               </div>
@@ -107,6 +149,8 @@ export default function CyberSecurityAuthPage() {
                     placeholder="Masukkan password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
                   />
                   <button
                     type="button"
@@ -154,13 +198,20 @@ export default function CyberSecurityAuthPage() {
               
               {/* Submit Button */}
               <button
-                onClick={handleSubmit}
-                className="flex w-full justify-center items-center space-x-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
+                type="submit"
+                disabled={loading}
+                className="flex w-full justify-center items-center space-x-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                <span>{isLogin ? "Login" : "Daftar Sekarang"}</span>
-                <ArrowRight size={16} />
+                {loading ? (
+                  <span>Memproses...</span>
+                ) : (
+                  <>
+                    <span>{isLogin ? "Login" : "Daftar Sekarang"}</span>
+                    <ArrowRight size={16} />
+                  </>
+                )}
               </button>
-            </div>
+            </form>
           </div>
           
           <div className="mt-8">
