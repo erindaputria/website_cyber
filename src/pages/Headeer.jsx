@@ -83,7 +83,7 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Desktop Auth Buttons */}
+          {/* Desktop Auth Buttons
           <div className="hidden md:flex items-center space-x-2 sm:space-x-4">
             <a
               href="/login"
@@ -97,7 +97,7 @@ const Navbar = () => {
             >
               Daftar
             </a>
-          </div>
+          </div> */}
 
           {/* Mobile Menu Button */}
           <button
@@ -145,7 +145,7 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Mobile Auth Buttons */}
+            {/* Mobile Auth Buttons
             <div className="py-4 border-t border-gray-200 space-y-3">
               <a
                 href="/login"
@@ -161,7 +161,7 @@ const Navbar = () => {
               >
                 Daftar
               </a>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

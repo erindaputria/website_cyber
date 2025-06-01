@@ -17,9 +17,9 @@ const AboutUs = () => {
     {
       id: 1,
       name: "Erinda Putri Awita",
-      role: "Front-End & Back-End Developer",
-      bio: "Berpengalaman dalam pengembangan front-end dan back-end aplikasi web. Tertarik pada keamanan siber dan terus belajar membangun aplikasi yang aman dan mudah digunakan.",
-      expertise: ["Web Development (React, Vite)", "Backend Development (PHP, Laravel)", "Basic Security Implementation"],
+      role: "Front-End & UI/UX Developer",
+      bio: "Berpengalaman dalam pengembangan front-end desain web. Tertarik pada keamanan siber dan terus belajar membangun aplikasi yang aman dan mudah digunakan.",
+      expertise: ["Web Development (React, Vite)", "Basic Security Implementation", "UI/UX Design", "Product Management"],
       image: erindalImage,
       gradient: "from-pink-500 to-orange-500"
     },
