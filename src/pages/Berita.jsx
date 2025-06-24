@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Search, Clock, BookOpen, Tag, User, ChevronRight, ArrowRight, Loader2, RefreshCw, AlertTriangle, Shield, Database, Cpu } from 'lucide-react';
 import Headeer from './Headeer';
 import Footer from './Footer';
+import { motion } from "framer-motion"; // Tambahkan import ini di bagian atas
 
 const Header = () => (
   <header className="bg-blue-900/80 text-white shadow-lg sticky top-0 z-50 backdrop-blur-md">
@@ -506,83 +507,126 @@ export default function CyberEduPortal() {
   );
 }
 
-// Enhanced Article Card Component
+// Enhanced Article Card Component with animation
 const ArticleCard = ({ article }) => {
   const getCategoryIcon = (category) => {
     switch(category) {
-      case 'Serangan Siber': return <AlertTriangle size={12} />;
-      case 'Privasi Data': return <Database size={12} />;
-      case 'AI & Keamanan': return <Cpu size={12} />;
-      case 'Kripto & Blockchain': return <Shield size={12} />;
-      case 'IoT Security': return <Cpu size={12} />;
-      case 'Mobile Security': return <Shield size={12} />;
-      case 'Cloud Security': return <Database size={12} />;
-      default: return <Shield size={12} />;
+      case 'Serangan Siber': return <AlertTriangle size={14} className="text-red-500" />;
+      case 'Privasi Data': return <Database size={14} className="text-blue-500" />;
+      case 'AI & Keamanan': return <Cpu size={14} className="text-purple-500" />;
+      case 'Kripto & Blockchain': return <Shield size={14} className="text-yellow-500" />;
+      case 'IoT Security': return <Cpu size={14} className="text-green-500" />;
+      case 'Mobile Security': return <Shield size={14} className="text-pink-500" />;
+      case 'Cloud Security': return <Database size={14} className="text-cyan-500" />;
+      default: return <Shield size={14} className="text-gray-400" />;
     }
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col">
-      <div className="relative flex-shrink-0">
-        <img 
-          src={article.image} 
-          alt={article.title} 
-          className="w-full h-48 object-cover"
+    <motion.div
+      initial={{ opacity: 0, y: 40, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      whileHover={{
+        scale: 1.04,
+        boxShadow: "0 8px 32px 0 rgba(37,99,235,0.15)",
+        transition: { duration: 0.2 }
+      }}
+      className="relative bg-gradient-to-br from-white via-blue-50 to-blue-100 rounded-2xl shadow-lg overflow-hidden flex flex-col border border-blue-100 hover:border-blue-300 transition-all duration-300 h-full"
+    >
+      {/* Ribbon badges */}
+      {article.trending && (
+        <motion.div
+          initial={{ x: -30, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.2, type: "spring" }}
+          className="absolute top-4 left-0 bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-r-full text-xs font-bold shadow z-10"
+        >
+          🔥 TRENDING
+        </motion.div>
+      )}
+      {article.featured && (
+        <motion.div
+          initial={{ x: 30, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.2, type: "spring" }}
+          className="absolute top-4 right-0 bg-gradient-to-l from-blue-600 to-indigo-500 text-white px-3 py-1 rounded-l-full text-xs font-bold shadow z-10"
+        >
+          ⭐ FEATURED
+        </motion.div>
+      )}
+
+      {/* Image */}
+      <motion.div
+        className="relative"
+        initial={{ scale: 1 }}
+        whileHover={{ scale: 1.04 }}
+        transition={{ duration: 0.3 }}
+      >
+        <img
+          src={article.image}
+          alt={article.title}
+          className="w-full h-48 object-cover object-center rounded-t-2xl border-b border-blue-100"
           onError={(e) => {
             e.target.src = getRandomPlaceholderImage();
           }}
         />
-        {article.trending && (
-          <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-            TRENDING
-          </div>
-        )}
-        {article.featured && (
-          <div className="absolute top-3 right-3 bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-bold">
-            FEATURED
-          </div>
-        )}
-      </div>
-      
+        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/30 to-transparent rounded-t-2xl pointer-events-none" />
+      </motion.div>
+
+      {/* Content */}
       <div className="p-5 flex-grow flex flex-col">
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-          <span className="bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1">
+        <div className="flex items-center justify-between text-xs mb-3">
+          <span className="flex items-center gap-1 bg-blue-100/70 text-blue-700 px-3 py-1 rounded-full font-semibold shadow-sm">
             {getCategoryIcon(article.category)}
             {article.category}
           </span>
-          <span className="flex items-center">
-            <Clock size={12} className="mr-1" /> {article.readTime}
+          <span className="flex items-center text-gray-400">
+            <Clock size={13} className="mr-1" /> {article.readTime}
           </span>
         </div>
-        
-        <h3 className="text-lg font-bold mb-3 line-clamp-2 hover:text-blue-600 transition-colors">
+
+        <motion.h3
+          className="text-lg font-extrabold mb-2 line-clamp-2 hover:text-blue-700 transition-colors"
+          whileHover={{ color: "#1d4ed8" }}
+        >
           {article.title}
-        </h3>
-        
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">{article.summary}</p>
-        
+        </motion.h3>
+
+        <motion.p
+          className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow"
+          initial={{ opacity: 0.8 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          {article.summary}
+        </motion.p>
+
         <div className="flex justify-between items-center mt-auto">
           <div className="text-xs text-gray-500">
-            <div>{article.author}</div>
+            <div className="flex items-center gap-1">
+              <User size={13} className="mr-1" /> {article.author}
+            </div>
             <div>{article.date}</div>
           </div>
-          <a 
-            href={article.url} 
-            target="_blank" 
+          <motion.a
+            href={article.url}
+            target="_blank"
             rel="noopener noreferrer"
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm flex items-center hover:bg-blue-700 transition-colors"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-full text-sm font-bold flex items-center gap-1 shadow hover:from-blue-700 hover:to-indigo-700 transition-all"
+            whileTap={{ scale: 0.96 }}
+            whileHover={{ scale: 1.06 }}
           >
-            Baca <ChevronRight size={14} className="ml-1" />
-          </a>
+            Baca <ChevronRight size={15} />
+          </motion.a>
         </div>
-        
-        <div className="mt-3 pt-3 border-t border-gray-100">
-          <span className="text-xs text-gray-400">Sumber: {article.source}</span>
+
+        <div className="mt-4 pt-3 border-t border-blue-100 flex items-center justify-between">
+          <span className="text-xs text-gray-400">Sumber: <span className="font-semibold">{article.source}</span></span>
           {article.score > 0 && (
-            <span className="text-xs text-gray-400 ml-2">• Relevansi: {article.score}</span>
+            <span className="text-xs text-blue-400 ml-2">• Relevansi: {article.score}</span>
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

@@ -83,7 +83,7 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Desktop Auth Buttons
+          {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center space-x-2 sm:space-x-4">
             <a
               href="/login"
@@ -92,12 +92,12 @@ const Navbar = () => {
               Masuk
             </a>
             <a
-              href="/register"
+              href="/login"
               className="text-sm sm:text-base bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-4 sm:px-6 py-2 rounded-full hover:shadow-lg transition-all duration-300 hover:scale-105 font-medium"
             >
               Daftar
             </a>
-          </div> */}
+          </div>
 
           {/* Mobile Menu Button */}
           <button
@@ -145,7 +145,7 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Mobile Auth Buttons
+            {/* Mobile Auth Buttons */}
             <div className="py-4 border-t border-gray-200 space-y-3">
               <a
                 href="/login"
@@ -155,13 +155,13 @@ const Navbar = () => {
                 Masuk
               </a>
               <a
-                href="/register"
+                href="/login"
                 className="block px-4 py-3 text-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:shadow-md transition-all duration-300 font-medium mb-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Daftar
               </a>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>
