@@ -249,17 +249,6 @@ function UpdatePatchQuiz({ onBack }) {
 
   return (
     <div className="max-w-3xl mx-auto px-4">
-      {/* Header dengan tombol kembali */}
-      <div className="flex items-center mb-8">
-        <button
-          onClick={onBack}
-          className="flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors group"
-        >
-          <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-          Kembali ke Materi
-        </button>
-      </div>
-
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
         {/* Quiz Header */}
         <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 p-6 text-white">
@@ -420,7 +409,7 @@ function UpdatePatchQuiz({ onBack }) {
                   onClick={onBack}
                   className="px-8 py-3 rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-semibold hover:from-indigo-600 hover:to-indigo-700 transition-colors shadow-md"
                 >
-                  Pelajari Materi
+                  Kembali ke Materi
                 </button>
               </div>
             </div>

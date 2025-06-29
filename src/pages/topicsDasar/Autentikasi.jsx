@@ -219,17 +219,6 @@ function TwoFAQuiz({ onBack }) {
 
   return (
     <div className="max-w-3xl mx-auto px-4">
-      {/* Header dengan tombol kembali */}
-      <div className="flex items-center mb-8">
-        <button
-          onClick={onBack}
-          className="flex items-center text-purple-600 hover:text-purple-800 font-medium transition-colors group"
-        >
-          <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-          Kembali ke Materi
-        </button>
-      </div>
-
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
         {/* Quiz Header */}
         <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6 text-white">
@@ -390,7 +379,7 @@ function TwoFAQuiz({ onBack }) {
                   onClick={onBack}
                   className="px-8 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold hover:from-purple-600 hover:to-purple-700 transition-colors shadow-md"
                 >
-                  Pelajari Materi
+                  Kembali ke Materi
                 </button>
               </div>
             </div>

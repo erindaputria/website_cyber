@@ -53,7 +53,7 @@ export default function Dasar({ onBack }) {
                   <Shield className="w-10 h-10 sm:w-12 sm:h-12" />
                 </div>
                 <div>
-                  <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2">Dasar Keamanan Cyber</h2>
+                  <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2">Keamanan Cyber Tingkat Dasar</h2>
                   <p className="text-blue-100 mt-1 sm:mt-2 max-w-2xl text-base sm:text-lg font-medium">
                     Materi pengenalan keamanan cyber untuk pemula. Pelajari konsep dasar untuk melindungi diri dan organisasi dari ancaman digital.
                   </p>

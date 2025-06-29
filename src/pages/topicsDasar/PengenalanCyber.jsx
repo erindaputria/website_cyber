@@ -293,17 +293,6 @@ function QuizPage({ onBack }) {
 
   return (
     <div className="max-w-3xl mx-auto px-4">
-      {/* Header dengan tombol kembali */}
-      <div className="flex items-center mb-6">
-        <button
-          onClick={onBack}
-          className="flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors group text-sm"
-        >
-          <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-0.5 transition-transform" />
-          Kembali ke Materi
-        </button>
-      </div>
-
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         {/* Quiz Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-5 text-white">
@@ -464,7 +453,7 @@ function QuizPage({ onBack }) {
                   onClick={onBack}
                   className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition-colors shadow-sm text-sm"
                 >
-                  Pelajari Materi
+                  Kembali ke Materi
                 </button>
               </div>
             </div>
