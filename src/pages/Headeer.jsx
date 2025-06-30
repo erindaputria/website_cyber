@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Shield, Menu, X } from 'lucide-react';
+import { href } from 'react-router-dom';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,6 +42,7 @@ const Navbar = () => {
     { href: '/', label: 'Beranda' },
     { href: '/materi', label: 'Materi' },
     { href: '/berita', label: 'Berita' },
+    { href: '/forum', label: 'Forum Diskusi'},
     { href: '/tentang', label: 'Tentang Kami' }
   ];
 

@@ -9,6 +9,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './pages/Navbar'
 import Kuis from './pages/Kuis'
 import Tentang from './pages/Tentang'
+import Forum from './pages/Forum'
+import Admin from './pages/Admin'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -22,6 +24,8 @@ function App() {
       <Route path="/berita" element={<Berita />} />
       <Route path="/kuis" element= {<Kuis />} />
       <Route path="/tentang" element={<Tentang />} />
+      <Route path="/forum" element={<Forum />} />
+      <Route path="/admin" element={<Admin />} />
     </Routes>
    </Router>
   )

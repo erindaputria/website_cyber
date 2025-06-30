@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-// Quiz data
+// Expanded quiz data with 25 questions per level
 const quizData = {
   dasar: [
     {
@@ -16,94 +16,267 @@ const quizData = {
     },
     {
       id: 2,
-      question: "Manakah yang BUKAN termasuk prinsip dasar keamanan cyber?",
-      options: ["Kerahasiaan (confidentiality)", "Integritas (Integrity)", "Ketersediaan (availability)", "Kecepatan (velocity)"],
-      answer: "Kecepatan (velocity)"
+      question: "Apa itu firewall dalam konteks keamanan jaringan?",
+      options: [
+        "Perangkat untuk memblokir akses fisik ke server",
+        "Sistem yang mengontrol lalu lintas jaringan berdasarkan aturan keamanan",
+        "Program untuk memindai virus",
+        "Alat untuk meningkatkan kecepatan internet"
+      ],
+      answer: "Sistem yang mengontrol lalu lintas jaringan berdasarkan aturan keamanan"
     },
     {
       id: 3,
-      question: "Menurut statistik, berapa persen pelanggaran keamanan cyber disebabkan oleh kesalahan manusia",
+      question: "Apa tujuan utama dari enkripsi data?",
       options: [
-        "50%", "75", "95%","25%"
+        "Mempercepat transfer data",
+        "Mengurangi ukuran file",
+        "Melindungi kerahasiaan informasi",
+        "Meningkatkan kinerja sistem"
       ],
-      answer: "95%"
+      answer: "Melindungi kerahasiaan informasi"
     },
     {
       id: 4,
-      question: "Karakteristik password yang kuat adalah?",
+      question: "Apa yang dimaksud dengan phishing?",
       options: [
-        "Menggunakan nama hewan peliharaan", 
-        "Panjang minimal 12 karakter dengan kombinasi huruf, angka, dan simbol", 
-        "Menggunakan tanggal lahir",
-        "Kata yang ada di kamus"
+        "Teknik meningkatkan kecepatan internet",
+        "Metode enkripsi data",
+        "Serangan sosial engineering untuk mencuri informasi sensitif",
+        "Jenis virus komputer"
       ],
-      answer: "Panjang minimal 12 karakter dengan kombinasi huruf, angka, dan simbol"
+      answer: "Serangan sosial engineering untuk mencuri informasi sensitif"
     },
     {
       id: 5,
-      question: "Manakah yang termasuk praktik buruk dalam mengelola password?",
+      question: "Apa itu malware?",
       options: [
-        "Menggunakan password manager", 
-        "Mengaktifkan autentikasi dua faktor", 
-        "Menggunakan password yang sama untuk banyak akun",
-        "Membuat password panjang dengan karakter acak"
+        "Perangkat keras khusus untuk keamanan",
+        "Software yang dirancang untuk merusak atau menyusup ke sistem komputer",
+        "Protokol jaringan yang aman",
+        "Teknik backup data"
       ],
-      answer: "Menggunakan password yang sama untuk banyak akun"
+      answer: "Software yang dirancang untuk merusak atau menyusup ke sistem komputer"
     },
     {
       id: 6,
-      question: "Contoh password yang paling kuat adalah?",
+      question: "Apa yang dimaksud dengan VPN?",
       options: [
-        "password123",
-        "12345678",
-        "Winter*Is-Coming^22",
-        "namaanda1980"
+        "Virtual Private Network - jaringan pribadi yang aman melalui internet",
+        "Virus Protection Network - sistem deteksi virus",
+        "Visual Programming Network - alat pengembangan software",
+        "Video Processing Node - perangkat pemrosesan video"
       ],
-      answer: "Winter*Is-Coming^22"
+      answer: "Virtual Private Network - jaringan pribadi yang aman melalui internet"
     },
     {
       id: 7,
-      question: "Apa perbedaan utama antara virus dan worm?",
+      question: "Apa itu two-factor authentication (2FA)?",
       options: [
-        "Virus menyebar melalui jaringan, worm menginfeksi file",
-        "Worm menyebar melalui jaringan, virus menginfeksi file",
-        "Virus meminta tebusan, worm mencuri data",
-        "Tidak ada perbedaan"
+        "Metode enkripsi ganda",
+        "Sistem keamanan yang membutuhkan dua bentuk identifikasi",
+        "Teknik kompresi file",
+        "Protokol jaringan tingkat lanjut"
       ],
-      answer: "Worm menyebar melalui jaringan, virus menginfeksi file"
+      answer: "Sistem keamanan yang membutuhkan dua bentuk identifikasi"
     },
     {
       id: 8,
-      question: "Manakah yang BUKAN tanda komputer terinfeksi malware?",
+      question: "Apa yang dimaksud dengan patch dalam keamanan siber?",
       options: [
-        "Performa komputer meningkat",
-        "Banyak pop-up muncul",
-        "Program tidak dikenal berjalan",
-        "File hilang atau terenkripsi"
+        "Teknik hacking",
+        "Perangkat lunak tambahan untuk memperbaiki kerentanan",
+        "Metode backup data",
+        "Jenis firewall"
       ],
-      answer: "Performa komputer meningkat"
+      answer: "Perangkat lunak tambahan untuk memperbaiki kerentanan"
     },
     {
       id: 9,
-      question: "Apa yang dilakukan ransomware?",
+      question: "Apa itu DDoS attack?",
       options: [
-        "Mengenkripsi data dan meminta tebusan",
-        "Mencuri data kartu kredit",
-        "Mengubah homepage browser",
-        "Mempercepat performa komputer"
+        "Serangan yang membanjiri target dengan lalu lintas dari banyak sumber",
+        "Teknik enkripsi data",
+        "Metode recovery data",
+        "Jenis malware khusus"
       ],
-      answer: "Mengenkripsi data dan meminta tebusan"
+      answer: "Serangan yang membanjiri target dengan lalu lintas dari banyak sumber"
     },
     {
       id: 10,
-      question: "Kasus malware WannaCry pada tahun 2017 mengeksploitasi?",
+      question: "Apa yang dimaksud dengan brute force attack?",
       options: [
-        "Kerentanan EternalBlue pada sistem Windows",
-        "Kelemahan pada sistem Linux",
-        "Bug pada processor Intel",
-        "Masalah pada jaringan WiFi"
+        "Serangan fisik ke data center",
+        "Metode mencoba banyak kombinasi password sampai berhasil",
+        "Teknik social engineering",
+        "Jenis enkripsi kuat"
       ],
-      answer: "Kerentanan EternalBlue pada sistem Windows"
+      answer: "Metode mencoba banyak kombinasi password sampai berhasil"
+    },
+    {
+      id: 11,
+      question: "Apa itu ransomware?",
+      options: [
+        "Software antivirus",
+        "Malware yang mengenkripsi data korban dan meminta tebusan",
+        "Teknik pengamanan jaringan",
+        "Protokol komunikasi aman"
+      ],
+      answer: "Malware yang mengenkripsi data korban dan meminta tebusan"
+    },
+    {
+      id: 12,
+      question: "Apa yang dimaksud dengan zero-day vulnerability?",
+      options: [
+        "Kerentanan yang sudah diketahui dan diperbaiki",
+        "Kerentanan yang belum diketahui oleh vendor software",
+        "Bug minor tanpa dampak keamanan",
+        "Kerentanan pada sistem yang sudah tidak didukung"
+      ],
+      answer: "Kerentanan yang belum diketahui oleh vendor software"
+    },
+    {
+      id: 13,
+      question: "Apa tujuan dari penetration testing?",
+      options: [
+        "Meretas sistem untuk tujuan jahat",
+        "Mengidentifikasi kerentanan sistem dengan cara yang terkendali",
+        "Memperbaiki bug pada aplikasi",
+        "Meningkatkan kinerja sistem"
+      ],
+      answer: "Mengidentifikasi kerentanan sistem dengan cara yang terkendali"
+    },
+    {
+      id: 14,
+      question: "Apa itu social engineering?",
+      options: [
+        "Metode pengembangan software kolaboratif",
+        "Manipulasi psikologis untuk mendapatkan informasi sensitif",
+        "Teknik enkripsi sosial",
+        "Sistem keamanan berbasis komunitas"
+      ],
+      answer: "Manipulasi psikologis untuk mendapatkan informasi sensitif"
+    },
+    {
+      id: 15,
+      question: "Apa yang dimaksud dengan HTTPS?",
+      options: [
+        "Versi aman dari protokol HTTP",
+        "Hyper Text Transfer Protocol Standard",
+        "High-speed Transfer Protocol System",
+        "Hardware-based Transfer Protection System"
+      ],
+      answer: "Versi aman dari protokol HTTP"
+    },
+    {
+      id: 16,
+      question: "Apa itu biometric authentication?",
+      options: [
+        "Autentikasi berbasis lokasi",
+        "Autentikasi menggunakan karakteristik fisik atau perilaku",
+        "Sistem password ganda",
+        "Teknik enkripsi biometrik"
+      ],
+      answer: "Autentikasi menggunakan karakteristik fisik atau perilaku"
+    },
+    {
+      id: 17,
+      question: "Apa yang dimaksud dengan data breach?",
+      options: [
+        "Pemecahan data menjadi bagian-bagian kecil",
+        "Insiden dimana informasi sensitif diakses tanpa otorisasi",
+        "Teknik backup data terdistribusi",
+        "Metode kompresi data"
+      ],
+      answer: "Insiden dimana informasi sensitif diakses tanpa otorisasi"
+    },
+    {
+      id: 18,
+      question: "Apa itu spyware?",
+      options: [
+        "Software untuk memantau aktivitas sistem",
+        "Malware yang mengumpulkan informasi tanpa izin",
+        "Alat debugging resmi",
+        "Protokol jaringan aman"
+      ],
+      answer: "Malware yang mengumpulkan informasi tanpa izin"
+    },
+    {
+      id: 19,
+      question: "Apa yang dimaksud dengan whitelisting aplikasi?",
+      options: [
+        "Memblokir semua aplikasi kecuali yang diizinkan",
+        "Mengizinkan semua aplikasi kecuali yang diblokir",
+        "Teknik pengembangan aplikasi",
+        "Metode rating aplikasi"
+      ],
+      answer: "Memblokir semua aplikasi kecuali yang diizinkan"
+    },
+    {
+      id: 20,
+      question: "Apa itu honeypot dalam keamanan siber?",
+      options: [
+        "Teknik enkripsi khusus",
+        "Sistem yang dirancang untuk menarik dan mendeteksi peretas",
+        "Jenis malware khusus",
+        "Protokol jaringan aman"
+      ],
+      answer: "Sistem yang dirancang untuk menarik dan mendeteksi peretas"
+    },
+    {
+      id: 21,
+      question: "Apa yang dimaksud dengan principle of least privilege?",
+      options: [
+        "Memberikan pengguna hak akses minimum yang diperlukan",
+        "Memberikan semua pengguna hak akses penuh",
+        "Prinsip enkripsi maksimal",
+        "Teknik manajemen password"
+      ],
+      answer: "Memberikan pengguna hak akses minimum yang diperlukan"
+    },
+    {
+      id: 22,
+      question: "Apa itu sandbox dalam konteks keamanan?",
+      options: [
+        "Teknik backup data",
+        "Lingkungan terisolasi untuk menjalankan kode yang tidak terpercaya",
+        "Jenis firewall khusus",
+        "Metode kompresi file"
+      ],
+      answer: "Lingkungan terisolasi untuk menjalankan kode yang tidak terpercaya"
+    },
+    {
+      id: 23,
+      question: "Apa yang dimaksud dengan end-to-end encryption?",
+      options: [
+        "Enkripsi yang hanya berlaku di server",
+        "Enkripsi data dari pengirim ke penerima tanpa perantara bisa membaca",
+        "Teknik enkripsi parsial",
+        "Metode kompresi dan enkripsi gabungan"
+      ],
+      answer: "Enkripsi data dari pengirim ke penerima tanpa perantara bisa membaca"
+    },
+    {
+      id: 24,
+      question: "Apa itu CSRF (Cross-Site Request Forgery)?",
+      options: [
+        "Teknik optimasi website",
+        "Serangan yang memaksa pengguna menjalankan aksi yang tidak diinginkan",
+        "Metode autentikasi silang",
+        "Protokol transfer data aman"
+      ],
+      answer: "Serangan yang memaksa pengguna menjalankan aksi yang tidak diinginkan"
+    },
+    {
+      id: 25,
+      question: "Apa yang dimaksud dengan security policy?",
+      options: [
+        "Dokumen yang mengatur standar keamanan organisasi",
+        "Kebijakan asuransi keamanan",
+        "Protokol jaringan khusus",
+        "Sistem deteksi intrusi"
+      ],
+      answer: "Dokumen yang mengatur standar keamanan organisasi"
     }
   ],
   menengah: [
@@ -120,97 +293,267 @@ const quizData = {
     },
     {
       id: 2,
-      question: "Algoritma enkripsi AES-256 termasuk dalam kategori?",
-      options: ["Enkripsi asimetris", "Enkripsi simetris", "Fungsi hash", "Protokol pertukaran kunci"],
-      answer: "Enkripsi simetris"
+      question: "Apa itu XSS (Cross-Site Scripting)?",
+      options: [
+        "Teknik optimasi website",
+        "Serangan injeksi kode berbahaya ke halaman web",
+        "Metode transfer data antar situs",
+        "Protokol keamanan browser"
+      ],
+      answer: "Serangan injeksi kode berbahaya ke halaman web"
     },
     {
       id: 3,
-      question: "Manakah yang BUKAN penggunaan umum enkripsi?",
+      question: "Apa yang dimaksud dengan SQL injection?",
       options: [
-        "Melindungi data dalam penyimpanan (data at rest)", 
-        "Mengkompresi data untuk menghemat ruang", 
-        "Mengamankan komunikasi jaringan (data in transit)",
-        "Melindungi data yang sedang diproses (data in use)"
+        "Teknik backup database",
+        "Serangan injeksi kode SQL berbahaya melalui input aplikasi",
+        "Metode optimasi query SQL",
+        "Proses migrasi database"
       ],
-      answer: "Mengkompresi data untuk menghemat ruang" 
+      answer: "Serangan injeksi kode SQL berbahaya melalui input aplikasi"
     },
     {
       id: 4,
-      question: "Apa tujuan utama dari segmentasi jaringan?",
+      question: "Apa itu IDS (Intrusion Detection System)?",
       options: [
-        "Mempercepat kecepatan internet", 
-        "Membatasi penyebaran serangan jika terjadi pelanggaran", 
-        "Mengurangi biaya perangkat jaringan",
-        "Menyederhanakan manajemen pengguna"
+        "Sistem yang memantau jaringan untuk aktivitas mencurigakan",
+        "Teknik enkripsi data",
+        "Metode autentikasi canggih",
+        "Protokol transfer file"
       ],
-      answer: "Membatasi penyebaran serangan jika terjadi pelanggaran"
+      answer: "Sistem yang memantau jaringan untuk aktivitas mencurigakan"
     },
     {
       id: 5,
-      question: "Serangan Man-in-the-Middle (MitM) dapat dicegah dengan?",
+      question: "Apa perbedaan antara hashing dan enkripsi?",
       options: [
-        "Menggunakan enkripsi end-to-end", 
-        "Memperbesar bandwidth jaringan", 
-        "Menonaktifkan firewall",
-        "Menggunakan protokol HTTP"
+        "Hashing reversible, enkripsi tidak",
+        "Enkripsi reversible, hashing tidak (dalam konteks kriptografi yang baik)",
+        "Tidak ada perbedaan",
+        "Hashing hanya untuk password"
       ],
-      answer: "Teknik manipulasi psikologis untuk mendapatkan informasi pribadi"
+      answer: "Enkripsi reversible, hashing tidak (dalam konteks kriptografi yang baik)"
     },
     {
       id: 6,
-      question: "Kasus pelanggaran data Equifax 2017 terutama disebabkan oleh?",
+      question: "Apa itu man-in-the-middle attack?",
       options: [
-        "Serangan DDoS", 
-        "Kerentanan software yang tidak ditambal", 
-        "Password yang lemah",
-        "Social engineering"
+        "Serangan yang menyusup dalam komunikasi antara dua pihak",
+        "Teknik optimasi jaringan",
+        "Metode autentikasi pusat",
+        "Protokol keamanan lapisan tengah"
       ],
-      answer: "Kerentanan software yang tidak ditambal"
+      answer: "Serangan yang menyusup dalam komunikasi antara dua pihak"
     },
     {
       id: 7,
-      question: "Apa yang dimaksud dengan SQL Injection?",
+      question: "Apa yang dimaksud dengan salting dalam konteks password hashing?",
       options: [
-        "Teknik mengoptimalkan query database",
-        "Serangan dengan menyisipkan perintah SQL melalui input pengguna",
-        "Metode backup database otomatis",
-        "Cara mengimpor data ke database"
+        "Menambahkan data acak sebelum hashing untuk mencegah rainbow table attacks",
+        "Teknik kompresi password",
+        "Metode enkripsi ganda",
+        "Proses memperpendek password"
       ],
-      answer: "Serangan dengan menyisipkan perintah SQL melalui input pengguna"
+      answer: "Menambahkan data acak sebelum hashing untuk mencegah rainbow table attacks"
     },
     {
       id: 8,
-      question: "Manakah yang BUKAN termasuk dalam OWASP Top 10 2023?",
+      question: "Apa itu PKI (Public Key Infrastructure)?",
       options: [
-        "Broken Access Control",
-        "Cross-Site Scripting (XSS)",
-        "Slowloris Attack",
-        "Security Misconfiguration"
+        "Sistem untuk mengelola kunci enkripsi asimetris dan sertifikat digital",
+        "Protokol jaringan pribadi",
+        "Teknik manajemen password",
+        "Infrastruktur server fisik"
       ],
-      answer: "Slowloris Attack"
+      answer: "Sistem untuk mengelola kunci enkripsi asimetris dan sertifikat digital"
     },
     {
       id: 9,
-      question: "Bagaimana cara terbaik mencegah XSS (Cross-Site Scripting)?",
+      question: "Apa yang dimaksud dengan defense in depth?",
       options: [
-        "Menggunakan parameterized queries",
-        "Melakukan input validation dan output encoding",
-        "Menonaktifkan JavaScript",
-        "Mengenkripsi semua input pengguna"
+        "Penggunaan lapisan keamanan berganda",
+        "Teknik enkripsi dalam-dalam",
+        "Metode backup bertingkat",
+        "Strategi keamanan perimeter"
       ],
-      answer: "Melakukan input validation dan output encoding"
+      answer: "Penggunaan lapisan keamanan berganda"
     },
     {
       id: 10,
-      question: "Apa keuntungan utama menggunakan Prepared Statements dalam pemrograman database?",
+      question: "Apa itu zero-trust security model?",
       options: [
-        "Meningkatkan performa query",
-        "Mencegah SQL Injection",
-        "Mengurangi ukuran database",
-        "Mempermudah debugging"
+        "Model yang tidak mempercayai apapun di dalam atau luar jaringan",
+        "Sistem tanpa autentikasi",
+        "Protokol jaringan tanpa enkripsi",
+        "Model keamanan usang"
       ],
-      answer: "Mencegah SQL Injection"
+      answer: "Model yang tidak mempercayai apapun di dalam atau luar jaringan"
+    },
+    {
+      id: 11,
+      question: "Apa perbedaan antara vulnerability assessment dan penetration testing?",
+      options: [
+        "VA identifikasi kerentanan, pentest eksploitasi kerentanan",
+        "Tidak ada perbedaan",
+        "VA untuk hardware, pentest untuk software",
+        "VA lebih intensif dari pentest"
+      ],
+      answer: "VA identifikasi kerentanan, pentest eksploitasi kerentanan"
+    },
+    {
+      id: 12,
+      question: "Apa itu SIEM (Security Information and Event Management)?",
+      options: [
+        "Sistem untuk analisis keamanan real-time",
+        "Teknik enkripsi khusus",
+        "Metode manajemen password",
+        "Protokol jaringan aman"
+      ],
+      answer: "Sistem untuk analisis keamanan real-time"
+    },
+    {
+      id: 13,
+      question: "Apa yang dimaksud dengan threat intelligence?",
+      options: [
+        "Informasi tentang ancaman keamanan yang dikumpulkan dan dianalisis",
+        "Kecerdasan buatan untuk keamanan",
+        "Teknik pengumpulan data",
+        "Metode enkripsi canggih"
+      ],
+      answer: "Informasi tentang ancaman keamanan yang dikumpulkan dan dianalisis"
+    },
+    {
+      id: 14,
+      question: "Apa itu container security?",
+      options: [
+        "Keamanan fisik data center",
+        "Praktik mengamankan lingkungan container seperti Docker",
+        "Teknik enkripsi kontainer",
+        "Protokol transfer data"
+      ],
+      answer: "Praktik mengamankan lingkungan container seperti Docker"
+    },
+    {
+      id: 15,
+      question: "Apa yang dimaksud dengan OWASP Top 10?",
+      options: [
+        "10 protokol jaringan teratas",
+        "Daftar 10 kerentanan aplikasi web paling kritis",
+        "10 teknik enkripsi terbaik",
+        "Daftar 10 perusahaan keamanan terbesar"
+      ],
+      answer: "Daftar 10 kerentanan aplikasi web paling kritis"
+    },
+    {
+      id: 16,
+      question: "Apa itu WAF (Web Application Firewall)?",
+      options: [
+        "Firewall khusus untuk melindungi aplikasi web",
+        "Teknik optimasi web",
+        "Protokol transfer web",
+        "Metode pengembangan web"
+      ],
+      answer: "Firewall khusus untuk melindungi aplikasi web"
+    },
+    {
+      id: 17,
+      question: "Apa yang dimaksud dengan secure coding practices?",
+      options: [
+        "Praktik pengembangan software yang mengutamakan keamanan",
+        "Teknik enkripsi kode",
+        "Metode kompresi kode",
+        "Proses debugging"
+      ],
+      answer: "Praktik pengembangan software yang mengutamakan keamanan"
+    },
+    {
+      id: 18,
+      question: "Apa itu CASB (Cloud Access Security Broker)?",
+      options: [
+        "Perantara keamanan antara pengguna dan layanan cloud",
+        "Protokol transfer cloud",
+        "Teknik enkripsi data cloud",
+        "Metode backup cloud"
+      ],
+      answer: "Perantara keamanan antara pengguna dan layanan cloud"
+    },
+    {
+      id: 19,
+      question: "Apa yang dimaksud dengan red team vs blue team dalam keamanan siber?",
+      options: [
+        "Red team menyerang, blue team bertahan",
+        "Dua metode enkripsi berbeda",
+        "Strategi jaringan berbeda",
+        "Tidak ada perbedaan"
+      ],
+      answer: "Red team menyerang, blue team bertahan"
+    },
+    {
+      id: 20,
+      question: "Apa itu SOAR (Security Orchestration, Automation and Response)?",
+      options: [
+        "Teknologi untuk mengotomatisasi operasi keamanan",
+        "Protokol jaringan baru",
+        "Metode enkripsi canggih",
+        "Teknik pengembangan software"
+      ],
+      answer: "Teknologi untuk mengotomatisasi operasi keamanan"
+    },
+    {
+      id: 21,
+      question: "Apa yang dimaksud dengan MITRE ATT&CK framework?",
+      options: [
+        "Kerangka pengetahuan tentang taktik dan teknik serangan",
+        "Teknik enkripsi militer",
+        "Protokol jaringan pemerintah",
+        "Metode pengembangan keamanan"
+      ],
+      answer: "Kerangka pengetahuan tentang taktik dan teknik serangan"
+    },
+    {
+      id: 22,
+      question: "Apa itu DevSecOps?",
+      options: [
+        "Integrasi keamanan dalam proses DevOps",
+        "Teknik pengembangan khusus",
+        "Protokol keamanan baru",
+        "Metode enkripsi DevOps"
+      ],
+      answer: "Integrasi keamanan dalam proses DevOps"
+    },
+    {
+      id: 23,
+      question: "Apa yang dimaksud dengan ransomware-as-a-service?",
+      options: [
+        "Model bisnis dimana pelaku jual beli ransomware seperti layanan",
+        "Layanan pemulihan ransomware",
+        "Teknik pencegahan ransomware",
+        "Protokol anti-ransomware"
+      ],
+      answer: "Model bisnis dimana pelaku jual beli ransomware seperti layanan"
+    },
+    {
+      id: 24,
+      question: "Apa itu NIST Cybersecurity Framework?",
+      options: [
+        "Standar keamanan siber dari National Institute of Standards and Technology",
+        "Protokol jaringan pemerintah AS",
+        "Teknik enkripsi standar",
+        "Metode pengembangan aman"
+      ],
+      answer: "Standar keamanan siber dari National Institute of Standards and Technology"
+    },
+    {
+      id: 25,
+      question: "Apa yang dimaksud dengan zero-day exploit?",
+      options: [
+        "Eksploitasi kerentanan yang belum diketahui vendor",
+        "Teknik hacking tanpa alat",
+        "Serangan yang terjadi di hari pertama bulan",
+        "Metode pencegahan serangan"
+      ],
+      answer: "Eksploitasi kerentanan yang belum diketahui vendor"
     }
   ],
   lanjut: [
@@ -227,93 +570,290 @@ const quizData = {
     },
     {
       id: 2,
-      question: "Ancaman keamanan cloud yang paling umum menurut laporan terbaru adalah?",
-      options: ["Serangan DDoS", "Konfigurasi yang salah", "Zero-day exploits", "Serangan brute force"],
-      answer: "Data carving"
+      question: "Apa itu Advanced Persistent Threat (APT)?",
+      options: [
+        "Serangan yang dilakukan secara acak tanpa target tertentu",
+        "Serangan yang berlangsung lama dan terfokus pada target tertentu",
+        "Serangan yang hanya mengeksploitasi kerentanan zero-day",
+        "Serangan yang menggunakan teknik social engineering saja"
+      ],
+      answer: "Serangan yang berlangsung lama dan terfokus pada target tertentu"
     },
     {
       id: 3,
-      question: "Apa tujuan utama dari Cloud Security Posture Management (CSPM)?",
+      question: "Apa yang dimaksud dengan reverse engineering dalam konteks malware analysis?",
       options: [
-        "Mengoptimalkan biaya cloud", 
-        "Mengidentifikasi dan memperbaiki konfigurasi yang salah", 
-        "Meningkatkan performa aplikasi cloud",
-        "Mengelola kuota pengguna cloud"
+        "Proses menganalisis malware untuk memahami cara kerjanya",
+        "Teknik membuat malware",
+        "Metode enkripsi malware",
+        "Proses menghapus malware"
       ],
-      answer: "Mengidentifikasi dan memperbaiki konfigurasi yang salah"
+      answer: "Proses menganalisis malware untuk memahami cara kerjanya"
     },
     {
       id: 4,
-      question: "Fase pertama dalam metodologi penetration testing adalah?",
-      options: ["Scanning", "Exploitation", "Reconnaissance", "Reporting"],
-      answer: "Reconnaissance"
+      question: "Apa itu memory forensics?",
+      options: [
+        "Analisis memori sistem untuk bukti digital",
+        "Teknik meningkatkan memori sistem",
+        "Metode enkripsi memori",
+        "Proses backup memori"
+      ],
+      answer: "Analisis memori sistem untuk bukti digital"
     },
     {
       id: 5,
-      question: "Apa tujuan fase 'Maintaining Access' dalam penetration testing?",
+      question: "Apa yang dimaksud dengan steganografi?",
       options: [
-        "Menghapus jejak aktivitas testing", 
-        "Mengevaluasi kemampuan deteksi sistem", 
-        "Menilai dampak potensial jika penyerang berhasil masuk",
-        "Mengumpulkan informasi awal tentang target"
+        "Teknik menyembunyikan data dalam data lain",
+        "Metode enkripsi kuat",
+        "Protokol transfer data",
+        "Teknik analisis data"
       ],
-      answer: "Menilai dampak potensial jika penyerang berhasil masuk"
+      answer: "Teknik menyembunyikan data dalam data lain"
     },
     {
       id: 6,
-      question: "Tool yang khusus digunakan untuk simulasi serangan tim red team adalah?",
-      options: ["Wireshark", "Cobalt Strike", "Nessus", "Nmap" ],
-      answer: "Cobalt Strike"
+      question: "Apa itu homomorphic encryption?",
+      options: [
+        "Enkripsi yang memungkinkan komputasi pada data terenkripsi",
+        "Teknik enkripsi homogen",
+        "Metode kompresi data",
+        "Protokol jaringan aman"
+      ],
+      answer: "Enkripsi yang memungkinkan komputasi pada data terenkripsi"
     },
     {
       id: 7,
-      question: "Teknik social engineering yang menggunakan skenario yang dibuat-buat disebut?",
+      question: "Apa yang dimaksud dengan quantum cryptography?",
       options: [
-        "Phishing", 
-        "Pretexting", 
-        "Baiting", 
-        "Tailgating"
+        "Kriptografi berbasis prinsip mekanika kuantum",
+        "Teknik enkripsi kuantitatif",
+        "Metode analisis kuantum",
+        "Protokol jaringan kuantum"
       ],
-      answer: "Pretexting"
+      answer: "Kriptografi berbasis prinsip mekanika kuantum"
     },
     {
       id: 8,
-      question: "Kasus Twitter Bitcoin Scam 2020 terutama melibatkan?",
+      question: "Apa itu blockchain security?",
       options: [
-        "Exploit zero-day", 
-        "Social engineering terhadap karyawan", 
-        "Konfigurasi cloud yang salah",
-        "Serangan DDoS"
+        "Praktik mengamankan sistem blockchain dari serangan",
+        "Teknik mining blockchain",
+        "Metode enkripsi blok",
+        "Protokol transfer blockchain"
       ],
-      answer: "Social engineering terhadap karyawan"
+      answer: "Praktik mengamankan sistem blockchain dari serangan"
     },
     {
       id: 9,
-      question: "Apa bahaya utama dari deepfake technology dalam konteks social engineering?",
+      question: "Apa yang dimaksud dengan threat hunting?",
       options: [
-        "Merusak perangkat keras", 
-        "Memanipulasi orang dengan konten audio/video palsu", 
-        "Mengenkripsi data korban",
-        "Menyebabkan overload jaringan"
+        "Proaktif mencari ancaman yang lolos dari pertahanan otomatis",
+        "Teknik mengumpulkan malware",
+        "Metode analisis statis",
+        "Proses scanning otomatis"
       ],
-      answer: "Memanipulasi orang dengan konten audio/video palsu"
+      answer: "Proaktif mencari ancaman yang lolos dari pertahanan otomatis"
     },
     {
       id: 10,
-      question: "ADalam konteks keylogging, teknik 'form grabbing' terutama menargetkan",
+      question: "Apa itu deception technology?",
       options: [
-        "Input keyboard secara real-time",
-        "Data yang dikirim melalui form web sebelum dienkripsi",
-        "Screenshot layar pengguna",
-        "Memory proses aplikasi"
+        "Teknologi yang menipu penyerang dengan aset palsu",
+        "Metode social engineering",
+        "Teknik enkripsi menipu",
+        "Protokol jaringan menipu"
       ],
-      answer: "Data yang dikirim melalui form web sebelum dienkripsi"
+      answer: "Teknologi yang menipu penyerang dengan aset palsu"
+    },
+    {
+      id: 11,
+      question: "Apa yang dimaksud dengan purple team dalam keamanan siber?",
+      options: [
+        "Kolaborasi antara red team dan blue team",
+        "Tim khusus untuk enkripsi",
+        "Metode analisis ungu",
+        "Protokol jaringan khusus"
+      ],
+      answer: "Kolaborasi antara red team dan blue team"
+    },
+    {
+      id: 12,
+      question: "Apa itu FIDO (Fast Identity Online) authentication?",
+      options: [
+        "Standar autentikasi tanpa password",
+        "Teknik autentikasi cepat",
+        "Metode enkripsi online",
+        "Protokol transfer identitas"
+      ],
+      answer: "Standar autentikasi tanpa password"
+    },
+    {
+      id: 13,
+      question: "Apa yang dimaksud dengan AI dalam keamanan siber?",
+      options: [
+        "Penggunaan kecerdasan buatan untuk deteksi ancaman dan respon",
+        "Teknik enkripsi cerdas",
+        "Metode analisis internet",
+        "Protokol jaringan cerdas"
+      ],
+      answer: "Penggunaan kecerdasan buatan untuk deteksi ancaman dan respon"
+    },
+    {
+      id: 14,
+      question: "Apa itu digital forensics dan incident response (DFIR)?",
+      options: [
+        "Proses investigasi insiden keamanan dan pengumpulan bukti digital",
+        "Teknik enkripsi forensik",
+        "Metode respon cepat",
+        "Protokol jaringan forensik"
+      ],
+      answer: "Proses investigasi insiden keamanan dan pengumpulan bukti digital"
+    },
+    {
+      id: 15,
+      question: "Apa yang dimaksud dengan secure enclave?",
+      options: [
+        "Area terisolasi dalam prosesor untuk operasi aman",
+        "Teknik enkripsi khusus",
+        "Metode isolasi jaringan",
+        "Protokol transfer aman"
+      ],
+      answer: "Area terisolasi dalam prosesor untuk operasi aman"
+    },
+    {
+      id: 16,
+      question: "Apa itu TPM (Trusted Platform Module)?",
+      options: [
+        "Chip khusus untuk operasi kriptografi aman",
+        "Teknik manajemen platform",
+        "Metode enkripsi platform",
+        "Protokol transfer platform"
+      ],
+      answer: "Chip khusus untuk operasi kriptografi aman"
+    },
+    {
+      id: 17,
+      question: "Apa yang dimaksud dengan hardware security module (HSM)?",
+      options: [
+        "Perangkat fisik untuk mengelola kriptografi digital",
+        "Teknik keamanan hardware",
+        "Metode analisis hardware",
+        "Protokol hardware aman"
+      ],
+      answer: "Perangkat fisik untuk mengelola kriptografi digital"
+    },
+    {
+      id: 18,
+      question: "Apa itu post-quantum cryptography?",
+      options: [
+        "Algoritma kriptografi yang tahan terhadap komputer kuantum",
+        "Teknik enkripsi pasca kuantum",
+        "Metode analisis kuantum",
+        "Protokol jaringan kuantum"
+      ],
+      answer: "Algoritma kriptografi yang tahan terhadap komputer kuantum"
+    },
+    {
+      id: 19,
+      question: "Apa yang dimaksud dengan secure multiparty computation?",
+      options: [
+        "Metode untuk komputasi bersama pada data privat tanpa mengungkapkannya",
+        "Teknik enkripsi multipihak",
+        "Protokol jaringan multipihak",
+        "Metode analisis kelompok"
+      ],
+      answer: "Metode untuk komputasi bersama pada data privat tanpa mengungkapkannya"
+    },
+    {
+      id: 20,
+      question: "Apa itu differential privacy?",
+      options: [
+        "Teknik untuk membagikan data sambil melindungi privasi individu",
+        "Metode enkripsi berbeda",
+        "Protokol jaringan pribadi",
+        "Teknik analisis perbedaan"
+      ],
+      answer: "Teknik untuk membagikan data sambil melindungi privasi individu"
+    },
+    {
+      id: 21,
+      question: "Apa yang dimaksud dengan formal methods dalam keamanan sistem?",
+      options: [
+        "Penggunaan matematika untuk memverifikasi kebenaran sistem",
+        "Teknik enkripsi formal",
+        "Metode analisis resmi",
+        "Protokol jaringan formal"
+      ],
+      answer: "Penggunaan matematika untuk memverifikasi kebenaran sistem"
+    },
+    {
+      id: 22,
+      question: "Apa itu federated learning dalam konteks keamanan AI?",
+      options: [
+        "Pembelajaran mesin terdesentralisasi yang melindungi privasi data",
+        "Teknik pelatihan gabungan",
+        "Metode analisis federasi",
+        "Protokol jaringan pembelajaran"
+      ],
+      answer: "Pembelajaran mesin terdesentralisasi yang melindungi privasi data"
+    },
+    {
+      id: 23,
+      question: "Apa yang dimaksud dengan moving target defense?",
+      options: [
+        "Strategi yang terus mengubah sistem untuk membingungkan penyerang",
+        "Teknik enkripsi bergerak",
+        "Metode analisis target",
+        "Protokol jaringan dinamis"
+      ],
+      answer: "Strategi yang terus mengubah sistem untuk membingungkan penyerang"
+    },
+    {
+      id: 24,
+      question: "Apa itu cyber threat intelligence sharing?",
+      options: [
+        "Berbagi informasi ancaman antara organisasi untuk meningkatkan keamanan",
+        "Teknik enkripsi bersama",
+        "Metode analisis ancaman",
+        "Protokol jaringan intelijen"
+      ],
+      answer: "Berbagi informasi ancaman antara organisasi untuk meningkatkan keamanan"
+    },
+    {
+      id: 25,
+      question: "Apa yang dimaksud dengan cyber resilience?",
+      options: [
+        "Kemampuan sistem untuk terus beroperasi meskipun terjadi serangan",
+        "Teknik enkripsi tahan lama",
+        "Metode analisis ketahanan",
+        "Protokol jaringan tangguh"
+      ],
+      answer: "Kemampuan sistem untuk terus beroperasi meskipun terjadi serangan"
     }
   ]
 };
 
+// User progress tracking
+const getUserProgress = () => {
+  if (typeof window !== 'undefined') {
+    const progress = localStorage.getItem('cyberEduProgress');
+    return progress ? JSON.parse(progress) : { 
+      dasar: { completed: false, score: 0 }, 
+      menengah: { completed: false, score: 0 }, 
+      lanjut: { completed: false, score: 0 } 
+    };
+  }
+  return { 
+    dasar: { completed: false, score: 0 }, 
+    menengah: { completed: false, score: 0 }, 
+    lanjut: { completed: false, score: 0 } 
+  };
+};
+
 export default function CyberEduQuiz() {
-  const [activeScreen, setActiveScreen] = useState('welcome'); // welcome, levelSelect, quiz, result
+  const [activeScreen, setActiveScreen] = useState('welcome');
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -322,6 +862,11 @@ export default function CyberEduQuiz() {
   const [timeLeft, setTimeLeft] = useState(null);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [userProgress, setUserProgress] = useState(getUserProgress());
+  const [email, setEmail] = useState('');
+  const [showCertificateMessage, setShowCertificateMessage] = useState(false);
+  const [allLevelsCompleted, setAllLevelsCompleted] = useState(false);
+  const [passedCurrentLevel, setPassedCurrentLevel] = useState(false);
 
   useEffect(() => {
     let timer;
@@ -336,6 +881,30 @@ export default function CyberEduQuiz() {
     return () => clearTimeout(timer);
   }, [timeLeft, activeScreen]);
 
+  useEffect(() => {
+    // Check if all levels are completed with passing score
+    const allPassed = ['dasar', 'menengah', 'lanjut'].every(level => 
+      userProgress[level]?.completed && userProgress[level]?.score >= 70
+    );
+    setAllLevelsCompleted(allPassed);
+  }, [userProgress]);
+
+  const updateUserProgress = (level, newScore) => {
+    const passed = newScore >= 70;
+    const newProgress = { 
+      ...userProgress, 
+      [level]: { 
+        completed: passed || userProgress[level]?.completed, 
+        score: Math.max(newScore, userProgress[level]?.score || 0) 
+      } 
+    };
+    setUserProgress(newProgress);
+    setPassedCurrentLevel(passed);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('cyberEduProgress', JSON.stringify(newProgress));
+    }
+  };
+
   const startQuiz = (level) => {
     setSelectedLevel(level);
     setCurrentQuestion(0);
@@ -344,6 +913,7 @@ export default function CyberEduQuiz() {
     setTimeLeft(30); // 30 seconds per question
     setQuizCompleted(false);
     setActiveScreen('quiz');
+    setPassedCurrentLevel(false);
   };
 
   const handleOptionSelect = (option) => {
@@ -378,6 +948,8 @@ export default function CyberEduQuiz() {
       setTimeLeft(30); // Reset timer for next question
     } else {
       setQuizCompleted(true);
+      const finalScore = Math.round((score / quizData[selectedLevel].length) * 100);
+      updateUserProgress(selectedLevel, finalScore);
       setActiveScreen('result');
     }
   };
@@ -390,6 +962,17 @@ export default function CyberEduQuiz() {
     setScore(0);
     setAnswers([]);
     setQuizCompleted(false);
+    setPassedCurrentLevel(false);
+  };
+
+  const handleCertificateRequest = () => {
+    if (email && /\S+@\S+\.\S+/.test(email)) {
+      // In a real app, you would send this to your backend
+      setShowCertificateMessage(true);
+      setTimeout(() => {
+        setShowCertificateMessage(false);
+      }, 5000);
+    }
   };
 
   const getTimerColor = () => {
@@ -414,6 +997,13 @@ export default function CyberEduQuiz() {
       case 'lanjut': return 'Lanjut';
       default: return level;
     }
+  };
+
+  const isLevelLocked = (level) => {
+    if (level === 'dasar') return false;
+    if (level === 'menengah') return !userProgress.dasar.completed || userProgress.dasar.score < 70;
+    if (level === 'lanjut') return !userProgress.menengah.completed || userProgress.menengah.score < 70;
+    return false;
   };
 
   const renderWelcomeScreen = () => (
@@ -446,10 +1036,18 @@ export default function CyberEduQuiz() {
         {['dasar', 'menengah', 'lanjut'].map((level) => (
           <div 
             key={level}
-            className={`${getDifficultyColor(level)} bg-opacity-20 border-2 border-opacity-50 ${level === 'dasar' ? 'border-green-500' : level === 'menengah' ? 'border-yellow-500' : 'border-red-500'} rounded-xl p-6 cursor-pointer hover:transform hover:scale-105 transition-all`}
-            onClick={() => startQuiz(level)}
+            className={`${getDifficultyColor(level)} bg-opacity-20 border-2 border-opacity-50 ${level === 'dasar' ? 'border-green-500' : level === 'menengah' ? 'border-yellow-500' : 'border-red-500'} rounded-xl p-6 cursor-pointer hover:transform hover:scale-105 transition-all ${isLevelLocked(level) ? 'opacity-50 cursor-not-allowed' : ''}`}
+            onClick={() => !isLevelLocked(level) && startQuiz(level)}
           >
             <div className="flex flex-col items-center">
+              {isLevelLocked(level) && (
+                <div className="absolute top-2 right-2 bg-gray-800 rounded-full p-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+              )}
+              
               <div className={`w-20 h-20 ${getDifficultyColor(level)} rounded-full flex items-center justify-center mb-4`}>
                 {level === 'dasar' ? (
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -479,16 +1077,51 @@ export default function CyberEduQuiz() {
                     </svg>
                   ))}
                 </div>
+                {userProgress[level]?.completed && (
+                  <span className="ml-2 text-sm">
+                    (Skor tertinggi: {userProgress[level].score}%)
+                  </span>
+                )}
               </div>
               <button 
-                className={`mt-6 px-6 py-2 ${level === 'dasar' ? 'bg-green-500 hover:bg-green-600' : level === 'menengah' ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-red-500 hover:bg-red-600'} text-white rounded-full font-semibold transform transition-all`}
+                className={`mt-6 px-6 py-2 ${level === 'dasar' ? 'bg-green-500 hover:bg-green-600' : level === 'menengah' ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-red-500 hover:bg-red-600'} text-white rounded-full font-semibold transform transition-all ${isLevelLocked(level) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isLevelLocked(level)}
               >
-                Mulai Quiz
+                {userProgress[level]?.completed ? 'Coba Lagi' : 'Mulai Quiz'}
               </button>
             </div>
           </div>
         ))}
       </div>
+      
+      {allLevelsCompleted && (
+        <div className="mt-8 p-6 bg-gradient-to-r from-purple-800 to-blue-800 rounded-xl max-w-2xl w-full">
+          <h2 className="text-2xl font-bold mb-4 text-center">Selamat! Anda Telah Menyelesaikan Semua Level</h2>
+          <p className="text-center mb-4">Untuk menerima sertifikat, silakan masukkan alamat email Anda:</p>
+          
+          <div className="flex flex-col sm:flex-row gap-2">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Masukkan email Anda"
+              className="flex-grow px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+            <button
+              onClick={handleCertificateRequest}
+              className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-colors"
+            >
+              Minta Sertifikat
+            </button>
+          </div>
+          
+          {showCertificateMessage && (
+            <div className="mt-4 p-3 bg-green-700 bg-opacity-50 rounded-lg text-center">
+              Terima kasih! Sertifikat akan dikirim ke email Anda dalam waktu maksimal 14 hari kerja.
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 
@@ -571,20 +1204,20 @@ export default function CyberEduQuiz() {
   };
 
   const renderResultScreen = () => {
-    const percentage = (score / quizData[selectedLevel].length) * 100;
+    const percentage = Math.round((score / quizData[selectedLevel].length) * 100);
     let message, color;
     
     if (percentage >= 80) {
-      message = "Luar Biasa! Anda adalah ahli keamanan siber!";
+      message = "Luar Biasa! Anda menguasai level ini!";
       color = "text-green-400";
-    } else if (percentage >= 60) {
-      message = "Bagus! Anda memiliki pemahaman yang baik tentang keamanan siber.";
+    } else if (percentage >= 70) {
+      message = "Bagus! Anda lulus level ini dengan baik.";
       color = "text-blue-400";
-    } else if (percentage >= 40) {
-      message = "Cukup baik. Terus pelajari lebih lanjut tentang keamanan siber!";
+    } else if (percentage >= 50) {
+      message = "Hampir berhasil! Anda perlu belajar lebih giat lagi.";
       color = "text-yellow-400";
     } else {
-      message = "Jangan menyerah! Terus belajar untuk meningkatkan pemahaman Anda.";
+      message = "Anda belum mencapai nilai kelulusan (KKM 70). Silakan coba lagi!";
       color = "text-red-400";
     }
     
@@ -597,7 +1230,7 @@ export default function CyberEduQuiz() {
           <div className="flex flex-col items-center mb-8">
             <div className="relative w-48 h-48 mb-6">
               <div className="w-full h-full rounded-full bg-gray-700 flex items-center justify-center">
-                <div className={`text-5xl font-bold ${color}`}>{percentage.toFixed(0)}%</div>
+                <div className={`text-5xl font-bold ${color}`}>{percentage}%</div>
               </div>
               <svg className="absolute top-0 left-0 w-full h-full" viewBox="0 0 100 100">
                 <circle 
@@ -609,7 +1242,7 @@ export default function CyberEduQuiz() {
                 <circle 
                   cx="50" cy="50" r="45" 
                   fill="none" 
-                  stroke={percentage >= 80 ? "#10B981" : percentage >= 60 ? "#3B82F6" : percentage >= 40 ? "#FBBF24" : "#EF4444"} 
+                  stroke={percentage >= 80 ? "#10B981" : percentage >= 70 ? "#3B82F6" : percentage >= 50 ? "#FBBF24" : "#EF4444"} 
                   strokeWidth="8"
                   strokeDasharray="283"
                   strokeDashoffset={283 - (283 * percentage) / 100}
@@ -622,22 +1255,25 @@ export default function CyberEduQuiz() {
               Skor Anda: {score} dari {quizData[selectedLevel].length}
             </p>
             <p className={`text-lg ${color} text-center`}>{message}</p>
+            {percentage >= 70 && (
+              <p className="text-green-400 mt-2">✓ Anda telah menyelesaikan level ini!</p>
+            )}
           </div>
           
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4">Ringkasan Jawaban</h2>
-            <div className="space-y-4">
+            <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
               {answers.map((answer, index) => (
                 <div key={index} className={`p-4 rounded-lg ${answer.isCorrect ? 'bg-green-500 bg-opacity-10 border border-green-500' : 'bg-red-500 bg-opacity-10 border border-red-500'}`}>
                   <p className="font-medium mb-2">
                     {index + 1}. {answer.question}
                   </p>
-                  <div className="flex items-center">
+                  <div className="flex flex-col sm:flex-row">
                     <span className={answer.isCorrect ? 'text-green-400' : 'text-red-400'}>
                       Jawaban Anda: {answer.selectedAnswer}
                     </span>
                     {!answer.isCorrect && (
-                      <span className="text-green-400 ml-auto">
+                      <span className="text-green-400 sm:ml-auto mt-2 sm:mt-0">
                         Jawaban Benar: {answer.correctAnswer}
                       </span>
                     )}
@@ -654,11 +1290,27 @@ export default function CyberEduQuiz() {
             >
               Ulangi Quiz
             </button>
+            {percentage >= 70 && (
+              <button 
+                className="px-6 py-3 bg-green-500 hover:bg-green-600 rounded-lg font-semibold transition-colors"
+                onClick={() => {
+                  if (selectedLevel === 'dasar') {
+                    startQuiz('menengah');
+                  } else if (selectedLevel === 'menengah') {
+                    startQuiz('lanjut');
+                  } else {
+                    resetQuiz();
+                  }
+                }}
+              >
+                {selectedLevel === 'lanjut' ? 'Kembali ke Menu' : 'Lanjut ke Level Berikutnya'}
+              </button>
+            )}
             <button 
               className="px-6 py-3 bg-purple-500 hover:bg-purple-600 rounded-lg font-semibold transition-colors"
               onClick={resetQuiz}
             >
-              Pilih Level Lain
+              Kembali ke Pemilihan Level
             </button>
           </div>
         </div>
@@ -666,7 +1318,6 @@ export default function CyberEduQuiz() {
     );
   };
  
-  // Main render logic
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 to-purple-900">
       {activeScreen === 'welcome' && renderWelcomeScreen()}
